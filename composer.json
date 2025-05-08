@@ -34,8 +34,8 @@
     "tourze/enum-extra": "~0.0.5",
     "tourze/json-rpc-core": "^0.0.6",
     "tourze/json-rpc-lock-bundle": "0.1.*",
-    "yiisoft/json": "^1.0",
-    "tourze/json-rpc-paginator-bundle": "0.0.*"
+    "tourze/json-rpc-paginator-bundle": "0.0.*",
+    "yiisoft/json": "^1.0"
   },
   "require-dev": {
     "phpstan/phpstan": "^2.1",

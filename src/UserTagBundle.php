@@ -12,7 +12,6 @@ class UserTagBundle extends Bundle implements BundleDependencyInterface
     public static function getBundleDependencies(): array
     {
         return [
-            \AntdCpBundle\AntdCpBundle::class => ['all' => true],
         ];
     }
 }

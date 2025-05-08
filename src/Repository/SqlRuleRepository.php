@@ -4,7 +4,6 @@ namespace UserTagBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use DoctrineEnhanceBundle\Repository\CommonRepositoryAware;
 use UserTagBundle\Entity\SqlRule;
 
 /**
@@ -15,7 +14,6 @@ use UserTagBundle\Entity\SqlRule;
  */
 class SqlRuleRepository extends ServiceEntityRepository
 {
-    use CommonRepositoryAware;
 
     public function __construct(ManagerRegistry $registry)
     {

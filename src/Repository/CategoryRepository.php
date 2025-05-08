@@ -4,7 +4,6 @@ namespace UserTagBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use DoctrineEnhanceBundle\Repository\CommonRepositoryAware;
 use UserTagBundle\Entity\Category;
 
 /**
@@ -15,7 +14,6 @@ use UserTagBundle\Entity\Category;
  */
 class CategoryRepository extends ServiceEntityRepository
 {
-    use CommonRepositoryAware;
 
     public function __construct(ManagerRegistry $registry)
     {

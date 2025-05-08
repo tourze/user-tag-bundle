@@ -4,7 +4,6 @@ namespace UserTagBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use DoctrineEnhanceBundle\Repository\CommonRepositoryAware;
 use UserTagBundle\Entity\AssignLog;
 
 /**
@@ -15,7 +14,6 @@ use UserTagBundle\Entity\AssignLog;
  */
 class AssignLogRepository extends ServiceEntityRepository
 {
-    use CommonRepositoryAware;
 
     public function __construct(ManagerRegistry $registry)
     {

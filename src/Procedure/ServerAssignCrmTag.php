@@ -2,7 +2,7 @@
 
 namespace UserTagBundle\Procedure;
 
-use AppBundle\Service\UserService;
+use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Tourze\JsonRPC\Core\Attribute\MethodDoc;
 use Tourze\JsonRPC\Core\Attribute\MethodExpose;
 use Tourze\JsonRPC\Core\Attribute\MethodParam;
@@ -28,13 +28,13 @@ class ServerAssignCrmTag extends LockableProcedure
     public function __construct(
         private readonly LocalUserTagService $userTagService,
         private readonly TagRepository $tagRepository,
-        private readonly UserService $userService,
+        private readonly UserLoaderInterface $userLoader,
     ) {
     }
 
     public function execute(): array
     {
-        $user = $this->userService->findUserByIdentity($this->identity);
+        $user = $this->userLoader->loadUserByIdentifier($this->identity);
         if (!$user) {
             throw new ApiException('找不到用户信息');
         }

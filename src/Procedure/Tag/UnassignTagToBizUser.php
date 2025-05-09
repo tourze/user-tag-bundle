@@ -2,7 +2,7 @@
 
 namespace UserTagBundle\Procedure\Tag;
 
-use AppBundle\Repository\BizUserRepository;
+use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Tourze\JsonRPC\Core\Attribute\MethodDoc;
 use Tourze\JsonRPC\Core\Attribute\MethodExpose;
@@ -28,7 +28,7 @@ class UnassignTagToBizUser extends LockableProcedure
     public string $tagId;
 
     public function __construct(
-        private readonly BizUserRepository $userRepository,
+        private readonly UserLoaderInterface $userLoader,
         private readonly TagRepository $tagRepository,
         private readonly LocalUserTagService $userTagService,
     ) {
@@ -36,7 +36,7 @@ class UnassignTagToBizUser extends LockableProcedure
 
     public function execute(): array
     {
-        $user = $this->userRepository->find($this->userId);
+        $user = $this->userLoader->loadUserByIdentifier($this->userId);
         if (!$user) {
             throw new ApiException('找不到指定用户');
         }

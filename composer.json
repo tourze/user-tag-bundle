@@ -41,6 +41,7 @@
     "tourze/json-rpc-lock-bundle": "0.1.*",
     "tourze/json-rpc-log-bundle": "0.1.*",
     "tourze/json-rpc-paginator-bundle": "0.0.*",
+    "tourze/symfony-aop-lock-bundle": "0.0.*",
     "tourze/user-id-bundle": "0.1.*",
     "yiisoft/json": "^1.0"
   },

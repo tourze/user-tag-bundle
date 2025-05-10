@@ -92,8 +92,8 @@ class LocalUserTagService implements UserTagService
     /**
      * 解绑标签
      */
-    #[Lockable('crm_tag_user_{{ user.id }}')]
-    public function unassignTag(BizUser $user, Tag $tag): AssignLog
+    #[Lockable('crm_tag_user_{{ user.getUserIdentifier() }}')]
+    public function unassignTag(UserInterface $user, Tag $tag): AssignLog
     {
         $assignLog = $this->assignLogRepository->findOneBy([
             'user' => $user,

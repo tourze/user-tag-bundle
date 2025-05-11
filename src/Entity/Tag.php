@@ -21,13 +21,14 @@ use Tourze\EasyAdmin\Attribute\Column\ListColumn;
 use Tourze\EasyAdmin\Attribute\Field\FormField;
 use Tourze\EasyAdmin\Attribute\Filter\Filterable;
 use Tourze\EasyAdmin\Attribute\Filter\Keyword;
+use Tourze\UserTagContracts\TagInterface;
 use UserTagBundle\Enum\TagType;
 use UserTagBundle\Repository\TagRepository;
 
 #[ORM\Entity(repositoryClass: TagRepository::class)]
 #[ORM\Table(name: 'crm_tag', options: ['comment' => '客户标签'])]
 #[ORM\UniqueConstraint(name: 'crm_tag_idx_uniq', columns: ['category_id', 'name'])]
-class Tag implements \Stringable, PlainArrayInterface
+class Tag implements \Stringable, PlainArrayInterface, TagInterface
 {
     #[ListColumn(order: -1)]
     #[ExportColumn]
@@ -35,61 +36,6 @@ class Tag implements \Stringable, PlainArrayInterface
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER, options: ['comment' => 'ID'])]
     private ?int $id = 0;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-    #[Filterable]
-    #[IndexColumn]
-    #[ListColumn(order: 98, sorter: true)]
-    #[ExportColumn]
-    #[CreateTimeColumn]
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true, options: ['comment' => '创建时间'])]
-    private ?\DateTimeInterface $createTime = null;
-
-    #[UpdateTimeColumn]
-    #[ListColumn(order: 99, sorter: true)]
-    #[Filterable]
-    #[ExportColumn]
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true, options: ['comment' => '更新时间'])]
-    private ?\DateTimeInterface $updateTime = null;
-
-    public function setCreateTime(?\DateTimeInterface $createdAt): void
-    {
-        $this->createTime = $createdAt;
-    }
-
-    public function getCreateTime(): ?\DateTimeInterface
-    {
-        return $this->createTime;
-    }
-
-    public function setUpdateTime(?\DateTimeInterface $updateTime): void
-    {
-        $this->updateTime = $updateTime;
-    }
-
-    public function getUpdateTime(): ?\DateTimeInterface
-    {
-        return $this->updateTime;
-    }
-
-    #[CreatedByColumn]
-    #[ORM\Column(nullable: true, options: ['comment' => '创建人'])]
-    private ?string $createdBy = null;
-
-    #[UpdatedByColumn]
-    #[ORM\Column(nullable: true, options: ['comment' => '更新人'])]
-    private ?string $updatedBy = null;
-
-    #[CreateIpColumn]
-    #[ORM\Column(length: 128, nullable: true, options: ['comment' => '创建时IP'])]
-    private ?string $createdFromIp = null;
-
-    #[UpdateIpColumn]
-    #[ORM\Column(length: 128, nullable: true, options: ['comment' => '更新时IP'])]
-    private ?string $updatedFromIp = null;
 
     #[BoolColumn]
     #[IndexColumn]
@@ -132,6 +78,37 @@ class Tag implements \Stringable, PlainArrayInterface
     #[ORM\Column(type: Types::TEXT, nullable: true, options: ['comment' => '描述'])]
     private ?string $description = null;
 
+    #[CreatedByColumn]
+    #[ORM\Column(nullable: true, options: ['comment' => '创建人'])]
+    private ?string $createdBy = null;
+
+    #[UpdatedByColumn]
+    #[ORM\Column(nullable: true, options: ['comment' => '更新人'])]
+    private ?string $updatedBy = null;
+
+    #[CreateIpColumn]
+    #[ORM\Column(length: 128, nullable: true, options: ['comment' => '创建时IP'])]
+    private ?string $createdFromIp = null;
+
+    #[UpdateIpColumn]
+    #[ORM\Column(length: 128, nullable: true, options: ['comment' => '更新时IP'])]
+    private ?string $updatedFromIp = null;
+
+    #[Filterable]
+    #[IndexColumn]
+    #[ListColumn(order: 98, sorter: true)]
+    #[ExportColumn]
+    #[CreateTimeColumn]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true, options: ['comment' => '创建时间'])]
+    private ?\DateTimeInterface $createTime = null;
+
+    #[UpdateTimeColumn]
+    #[ListColumn(order: 99, sorter: true)]
+    #[Filterable]
+    #[ExportColumn]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true, options: ['comment' => '更新时间'])]
+    private ?\DateTimeInterface $updateTime = null;
+
     public function __toString(): string
     {
         if (!$this->getId()) {
@@ -141,52 +118,9 @@ class Tag implements \Stringable, PlainArrayInterface
         return "{$this->getCategory()}:{$this->getName()}";
     }
 
-    public function setCreatedBy(?string $createdBy): self
+    public function getId(): ?int
     {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    public function getCreatedBy(): ?string
-    {
-        return $this->createdBy;
-    }
-
-    public function setUpdatedBy(?string $updatedBy): self
-    {
-        $this->updatedBy = $updatedBy;
-
-        return $this;
-    }
-
-    public function getUpdatedBy(): ?string
-    {
-        return $this->updatedBy;
-    }
-
-    public function setCreatedFromIp(?string $createdFromIp): self
-    {
-        $this->createdFromIp = $createdFromIp;
-
-        return $this;
-    }
-
-    public function getCreatedFromIp(): ?string
-    {
-        return $this->createdFromIp;
-    }
-
-    public function setUpdatedFromIp(?string $updatedFromIp): self
-    {
-        $this->updatedFromIp = $updatedFromIp;
-
-        return $this;
-    }
-
-    public function getUpdatedFromIp(): ?string
-    {
-        return $this->updatedFromIp;
+        return $this->id;
     }
 
     public function isValid(): ?bool
@@ -247,6 +181,74 @@ class Tag implements \Stringable, PlainArrayInterface
         $this->description = $description;
 
         return $this;
+    }
+
+    public function setCreatedBy(?string $createdBy): self
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    public function getCreatedBy(): ?string
+    {
+        return $this->createdBy;
+    }
+
+    public function setUpdatedBy(?string $updatedBy): self
+    {
+        $this->updatedBy = $updatedBy;
+
+        return $this;
+    }
+
+    public function getUpdatedBy(): ?string
+    {
+        return $this->updatedBy;
+    }
+
+    public function setCreatedFromIp(?string $createdFromIp): self
+    {
+        $this->createdFromIp = $createdFromIp;
+
+        return $this;
+    }
+
+    public function getCreatedFromIp(): ?string
+    {
+        return $this->createdFromIp;
+    }
+
+    public function setUpdatedFromIp(?string $updatedFromIp): self
+    {
+        $this->updatedFromIp = $updatedFromIp;
+
+        return $this;
+    }
+
+    public function getUpdatedFromIp(): ?string
+    {
+        return $this->updatedFromIp;
+    }
+
+    public function setCreateTime(?\DateTimeInterface $createdAt): void
+    {
+        $this->createTime = $createdAt;
+    }
+
+    public function getCreateTime(): ?\DateTimeInterface
+    {
+        return $this->createTime;
+    }
+
+    public function setUpdateTime(?\DateTimeInterface $updateTime): void
+    {
+        $this->updateTime = $updateTime;
+    }
+
+    public function getUpdateTime(): ?\DateTimeInterface
+    {
+        return $this->updateTime;
     }
 
     public function retrievePlainArray(): array

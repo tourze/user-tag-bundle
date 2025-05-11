@@ -2,15 +2,12 @@
 
 namespace UserTagBundle\Service;
 
-use AppBundle\Entity\BizUser;
-use AppBundle\Service\UserTagService;
 use Carbon\Carbon;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\DependencyInjection\Attribute\AsDecorator;
-use Symfony\Component\DependencyInjection\Attribute\AutowireDecorated;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Tourze\Symfony\AopLockBundle\Attribute\Lockable;
+use Tourze\UserTagContracts\TagServiceInterface;
 use UserTagBundle\Entity\AssignLog;
 use UserTagBundle\Entity\Category;
 use UserTagBundle\Entity\Tag;
@@ -26,8 +23,7 @@ use UserTagBundle\Repository\TagRepository;
  * @see https://symfony.com/doc/current/service_container/service_decoration.html
  * @see https://symfony.com/blog/new-in-symfony-6-1-service-decoration-attributes
  */
-#[AsDecorator(decorates: UserTagService::class)]
-class LocalUserTagService implements UserTagService
+class LocalUserTagService implements TagServiceInterface
 {
     public function __construct(
         private readonly AssignLogRepository $assignLogRepository,
@@ -35,7 +31,6 @@ class LocalUserTagService implements UserTagService
         private readonly TagRepository $tagRepository,
         private readonly CategoryRepository $categoryRepository,
         private readonly EventDispatcherInterface $eventDispatcher,
-        #[AutowireDecorated] private readonly UserTagService $inner,
     ) {
     }
 
@@ -145,18 +140,11 @@ class LocalUserTagService implements UserTagService
         return $tag;
     }
 
-    public function getTagIdsByUser(UserInterface $user): array
+    public function loadTagsByUser(UserInterface $user): iterable
     {
-        $result = $this->inner->getTagIdsByUser($user);
-
-        $tags = [];
         $logs = $this->assignLogRepository->findBy(['user' => $user]);
         foreach ($logs as $log) {
-            $tags[] = $log->getTag()->getId();
+            yield $log->getTag();
         }
-
-        $result = array_merge($result, $tags);
-
-        return array_values(array_unique($result));
     }
 }

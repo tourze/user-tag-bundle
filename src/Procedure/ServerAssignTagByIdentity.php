@@ -11,7 +11,7 @@ use Tourze\JsonRPCLockBundle\Procedure\LockableProcedure;
 use Tourze\JsonRPCLogBundle\Attribute\Log;
 use Tourze\UserIDBundle\Service\UserIdentityService;
 use UserTagBundle\Repository\TagRepository;
-use UserTagBundle\Service\LocalUserTagService;
+use UserTagBundle\Service\LocalUserTagLoader;
 
 #[MethodTag('用户标签')]
 #[MethodDoc('为指定身份打标签')]
@@ -29,7 +29,7 @@ class ServerAssignTagByIdentity extends LockableProcedure
     public string $tagId;
 
     public function __construct(
-        private readonly LocalUserTagService $userTagService,
+        private readonly LocalUserTagLoader $userTagService,
         private readonly TagRepository $tagRepository,
         private readonly UserIdentityService $userIdentityService,
     ) {

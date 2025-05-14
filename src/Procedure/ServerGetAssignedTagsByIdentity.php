@@ -14,7 +14,7 @@ use Tourze\UserIDBundle\Service\UserIdentityService;
 use UserTagBundle\Entity\AssignLog;
 use UserTagBundle\Repository\AssignLogRepository;
 use UserTagBundle\Repository\TagRepository;
-use UserTagBundle\Service\LocalUserTagService;
+use UserTagBundle\Service\LocalUserTagLoader;
 
 #[MethodTag('用户标签')]
 #[MethodDoc('为指定身份打标签')]
@@ -31,7 +31,7 @@ class ServerGetAssignedTagsByIdentity extends LockableProcedure
     public string $identityValue;
 
     public function __construct(
-        private readonly LocalUserTagService $userTagService,
+        private readonly LocalUserTagLoader $userTagService,
         private readonly TagRepository $tagRepository,
         private readonly UserIdentityService $userIdentityService,
         private readonly AssignLogRepository $assignLogRepository,

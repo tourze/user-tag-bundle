@@ -8,7 +8,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionFunction;
 use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use UserTagBundle\Repository\AssignLogRepository;
-use UserTagBundle\Service\LocalUserTagService;
+use UserTagBundle\Service\LocalUserTagLoader;
 
 /**
  * CRM标签相关函数
@@ -18,7 +18,7 @@ class TagFunctionProvider implements ExpressionFunctionProviderInterface
 {
     public function __construct(
         private readonly LoggerInterface $logger,
-        private readonly LocalUserTagService $userTagService,
+        private readonly LocalUserTagLoader  $userTagService,
         private readonly AssignLogRepository $tagUserRepository,
     ) {
     }

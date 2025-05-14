@@ -12,7 +12,7 @@ use Tourze\JsonRPC\Core\Exception\ApiException;
 use Tourze\JsonRPCLockBundle\Procedure\LockableProcedure;
 use Tourze\JsonRPCLogBundle\Attribute\Log;
 use UserTagBundle\Repository\TagRepository;
-use UserTagBundle\Service\LocalUserTagService;
+use UserTagBundle\Service\LocalUserTagLoader;
 
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 #[MethodTag('用户标签')]
@@ -30,7 +30,7 @@ class AssignTagToBizUser extends LockableProcedure
     public function __construct(
         private readonly UserLoaderInterface $userLoader,
         private readonly TagRepository $tagRepository,
-        private readonly LocalUserTagService $userTagService,
+        private readonly LocalUserTagLoader  $userTagService,
     ) {
     }
 

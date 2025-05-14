@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Tourze\Symfony\AopLockBundle\Attribute\Lockable;
-use Tourze\UserTagContracts\TagServiceInterface;
+use Tourze\UserTagContracts\TagLoaderInterface;
 use UserTagBundle\Entity\AssignLog;
 use UserTagBundle\Entity\Category;
 use UserTagBundle\Entity\Tag;
@@ -23,7 +23,7 @@ use UserTagBundle\Repository\TagRepository;
  * @see https://symfony.com/doc/current/service_container/service_decoration.html
  * @see https://symfony.com/blog/new-in-symfony-6-1-service-decoration-attributes
  */
-class LocalUserTagService implements TagServiceInterface
+class LocalUserTagLoader implements TagLoaderInterface
 {
     public function __construct(
         private readonly AssignLogRepository $assignLogRepository,

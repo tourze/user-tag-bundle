@@ -2,7 +2,6 @@
 
 namespace UserTagBundle\Service;
 
-use AntdCpBundle\Service\SelectDataFormatter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Tourze\EnumExtra\SelectDataFetcher;
@@ -13,11 +12,10 @@ class DiyPageTagProvider implements SelectDataFetcher
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly SelectDataFormatter $selectDataFormatter,
     ) {
     }
 
-    public function genSelectData(): array
+    public function genSelectData(): iterable
     {
         $tags = $this->entityManager
             ->createQueryBuilder()
@@ -25,8 +23,15 @@ class DiyPageTagProvider implements SelectDataFetcher
             ->select('a')
             ->getQuery()
             ->toIterable();
-
-        // 注意下面我们不使用标签id作为值，直接使用标签名作为返回值
-        return $this->selectDataFormatter->buildOptionsFromEntities($tags, 'name', Tag::class);
+        foreach ($tags as $tag) {
+            /** @var Tag $tag */
+            // 注意下面我们不使用标签id作为值，直接使用标签名作为返回值
+            yield [
+                'label' => $tag->getName(),
+                'text' => $tag->getName(),
+                'value' => $tag->getName(),
+                'name' => $tag->getName(),
+            ];
+        }
     }
 }

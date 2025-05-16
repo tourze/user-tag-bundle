@@ -55,5 +55,10 @@
     "psr-4": {
       "UserTagBundle\\": "src"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "UserTagBundle\\Tests\\": "tests"
+    }
   }
 }

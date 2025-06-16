@@ -93,8 +93,6 @@ class AssignLogTest extends TestCase
 
     public function testSetAndGetCreatedBy(): void
     {
-        $this->markTestSkipped('Method getCreatedBy not implemented in AssignLog yet');
-        
         $this->assertNull($this->assignLog->getCreatedBy());
         
         $createdBy = 'admin';
@@ -107,8 +105,6 @@ class AssignLogTest extends TestCase
 
     public function testSetAndGetUpdatedBy(): void
     {
-        $this->markTestSkipped('Method getUpdatedBy not implemented in AssignLog yet');
-        
         $this->assertNull($this->assignLog->getUpdatedBy());
         
         $updatedBy = 'admin';
@@ -121,8 +117,6 @@ class AssignLogTest extends TestCase
 
     public function testSetAndGetCreatedFromIp(): void
     {
-        $this->markTestSkipped('Method getCreatedFromIp not implemented in AssignLog yet');
-        
         $this->assertNull($this->assignLog->getCreatedFromIp());
         
         $ip = '127.0.0.1';
@@ -135,8 +129,6 @@ class AssignLogTest extends TestCase
 
     public function testSetAndGetUpdatedFromIp(): void
     {
-        $this->markTestSkipped('Method getUpdatedFromIp not implemented in AssignLog yet');
-        
         $this->assertNull($this->assignLog->getUpdatedFromIp());
         
         $ip = '127.0.0.1';
@@ -149,8 +141,6 @@ class AssignLogTest extends TestCase
 
     public function testSetAndGetCreateTime(): void
     {
-        $this->markTestSkipped('Method getCreateTime not implemented in AssignLog yet');
-        
         $this->assertNull($this->assignLog->getCreateTime());
         
         $now = new \DateTime();
@@ -163,8 +153,6 @@ class AssignLogTest extends TestCase
 
     public function testSetAndGetUpdateTime(): void
     {
-        $this->markTestSkipped('Method getUpdateTime not implemented in AssignLog yet');
-        
         $this->assertNull($this->assignLog->getUpdateTime());
         
         $now = new \DateTime();
@@ -177,8 +165,6 @@ class AssignLogTest extends TestCase
 
     public function testRetrievePlainArray(): void
     {
-        $this->markTestSkipped('Method retrievePlainArray not implemented in AssignLog yet');
-        
         $user = $this->createMock(UserInterface::class);
         $user->method('getUserIdentifier')->willReturn('user123');
         

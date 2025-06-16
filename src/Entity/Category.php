@@ -158,6 +158,17 @@ class Category implements \Stringable, AdminArrayInterface, PlainArrayInterface
     #[ORM\Column(nullable: true, options: ['comment' => '是否互斥分组'])]
     private ?bool $mutex = false;
 
+    #[Groups(['restful_read', 'restful_write'])]
+    #[FormField(span: 10)]
+    #[ORM\Column(type: Types::TEXT, nullable: true, options: ['comment' => '分组描述'])]
+    private ?string $description = null;
+
+    #[ORM\Column(nullable: true, options: ['comment' => '创建IP'])]
+    private ?string $createdFromIp = null;
+
+    #[ORM\Column(nullable: true, options: ['comment' => '更新IP'])]
+    private ?string $updatedFromIp = null;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
@@ -309,6 +320,42 @@ class Category implements \Stringable, AdminArrayInterface, PlainArrayInterface
         return $this;
     }
 
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getCreatedFromIp(): ?string
+    {
+        return $this->createdFromIp;
+    }
+
+    public function setCreatedFromIp(?string $createdFromIp): static
+    {
+        $this->createdFromIp = $createdFromIp;
+
+        return $this;
+    }
+
+    public function getUpdatedFromIp(): ?string
+    {
+        return $this->updatedFromIp;
+    }
+
+    public function setUpdatedFromIp(?string $updatedFromIp): static
+    {
+        $this->updatedFromIp = $updatedFromIp;
+
+        return $this;
+    }
+
     /**
      * 获取后台的结构
      */
@@ -333,9 +380,15 @@ class Category implements \Stringable, AdminArrayInterface, PlainArrayInterface
             'createTime' => $this->getCreateTime()?->format('Y-m-d H:i:s'),
             'updateTime' => $this->getUpdateTime()?->format('Y-m-d H:i:s'),
             'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'valid' => $this->isValid(),
             'mutex' => $this->isMutex(),
             'tagCount' => $this->getTags()->count(),
             'children' => null,
+            'createdBy' => $this->getCreatedBy(),
+            'updatedBy' => $this->getUpdatedBy(),
+            'createdFromIp' => $this->getCreatedFromIp(),
+            'updatedFromIp' => $this->getUpdatedFromIp(),
         ];
     }
 }

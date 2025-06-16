@@ -6,6 +6,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Tourze\Arrayable\ApiArrayInterface;
+use Tourze\Arrayable\PlainArrayInterface;
 use Tourze\DoctrineIndexedBundle\Attribute\IndexColumn;
 use Tourze\DoctrineSnowflakeBundle\Service\SnowflakeIdGenerator;
 use Tourze\DoctrineTimestampBundle\Attribute\CreateTimeColumn;
@@ -35,7 +36,7 @@ use UserTagBundle\Repository\AssignLogRepository;
 #[ORM\Entity(repositoryClass: AssignLogRepository::class)]
 #[ORM\Table(name: 'crm_tag_user', options: ['comment' => '打标记录'])]
 #[ORM\UniqueConstraint(name: 'crm_tag_user_idx_uniq', columns: ['tag_id', 'user_id'])]
-class AssignLog implements ApiArrayInterface
+class AssignLog implements ApiArrayInterface, PlainArrayInterface
 {
     #[Filterable]
     #[IndexColumn]
@@ -112,6 +113,12 @@ class AssignLog implements ApiArrayInterface
     #[ORM\Column(nullable: true, options: ['comment' => '更新人'])]
     private ?string $updatedBy = null;
 
+    #[ORM\Column(nullable: true, options: ['comment' => '创建IP'])]
+    private ?string $createdFromIp = null;
+
+    #[ORM\Column(nullable: true, options: ['comment' => '更新IP'])]
+    private ?string $updatedFromIp = null;
+
     public function getId(): ?string
     {
         return $this->id;
@@ -139,6 +146,30 @@ class AssignLog implements ApiArrayInterface
     public function getUpdatedBy(): ?string
     {
         return $this->updatedBy;
+    }
+
+    public function setCreatedFromIp(?string $createdFromIp): self
+    {
+        $this->createdFromIp = $createdFromIp;
+
+        return $this;
+    }
+
+    public function getCreatedFromIp(): ?string
+    {
+        return $this->createdFromIp;
+    }
+
+    public function setUpdatedFromIp(?string $updatedFromIp): self
+    {
+        $this->updatedFromIp = $updatedFromIp;
+
+        return $this;
+    }
+
+    public function getUpdatedFromIp(): ?string
+    {
+        return $this->updatedFromIp;
     }
 
     public function isValid(): ?bool
@@ -216,6 +247,29 @@ class AssignLog implements ApiArrayInterface
             'tag' => $tag,
             'createTime' => $this->getCreateTime()?->format('Y-m-d H:i:s'),
             'updateTime' => $this->getUpdateTime()?->format('Y-m-d H:i:s'),
+        ];
+    }
+
+    public function retrievePlainArray(): array
+    {
+        $tag = null;
+        if ($this->getTag()) {
+            $tag = $this->getTag()->retrievePlainArray();
+        }
+
+        return [
+            'id' => $this->getId(),
+            'createTime' => $this->getCreateTime()?->format('Y-m-d H:i:s'),
+            'updateTime' => $this->getUpdateTime()?->format('Y-m-d H:i:s'),
+            'valid' => $this->isValid(),
+            'user' => $this->getUser()->getUserIdentifier(),
+            'tag' => $tag,
+            'assignTime' => $this->getAssignTime()?->format('Y-m-d H:i:s'),
+            'unassignTime' => $this->getUnassignTime()?->format('Y-m-d H:i:s'),
+            'createdBy' => $this->getCreatedBy(),
+            'updatedBy' => $this->getUpdatedBy(),
+            'createdFromIp' => $this->getCreatedFromIp(),
+            'updatedFromIp' => $this->getUpdatedFromIp(),
         ];
     }
 }

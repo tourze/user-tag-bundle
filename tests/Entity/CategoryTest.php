@@ -51,8 +51,6 @@ class CategoryTest extends TestCase
 
     public function testSetAndGetDescription(): void
     {
-        $this->markTestSkipped('Method getDescription not implemented in Category yet');
-        
         $this->assertNull($this->category->getDescription());
         
         $description = '这是一个测试分类的描述';
@@ -76,8 +74,6 @@ class CategoryTest extends TestCase
 
     public function testSetAndGetCreatedBy(): void
     {
-        $this->markTestSkipped('Method getCreatedBy not implemented in Category yet');
-        
         $this->assertNull($this->category->getCreatedBy());
         
         $createdBy = 'admin';
@@ -90,8 +86,6 @@ class CategoryTest extends TestCase
 
     public function testSetAndGetUpdatedBy(): void
     {
-        $this->markTestSkipped('Method getUpdatedBy not implemented in Category yet');
-        
         $this->assertNull($this->category->getUpdatedBy());
         
         $updatedBy = 'admin';
@@ -104,8 +98,6 @@ class CategoryTest extends TestCase
 
     public function testSetAndGetCreatedFromIp(): void
     {
-        $this->markTestSkipped('Method getCreatedFromIp not implemented in Category yet');
-        
         $this->assertNull($this->category->getCreatedFromIp());
         
         $ip = '127.0.0.1';
@@ -118,8 +110,6 @@ class CategoryTest extends TestCase
 
     public function testSetAndGetUpdatedFromIp(): void
     {
-        $this->markTestSkipped('Method getUpdatedFromIp not implemented in Category yet');
-        
         $this->assertNull($this->category->getUpdatedFromIp());
         
         $ip = '127.0.0.1';
@@ -132,8 +122,6 @@ class CategoryTest extends TestCase
 
     public function testSetAndGetCreateTime(): void
     {
-        $this->markTestSkipped('Method getCreateTime not implemented in Category yet');
-        
         $this->assertNull($this->category->getCreateTime());
         
         $now = new \DateTime();
@@ -146,7 +134,7 @@ class CategoryTest extends TestCase
 
     public function testSetAndGetUpdateTime(): void
     {
-        $this->markTestSkipped('Method getUpdateTime not implemented in Category yet');
+        $this->assertNull($this->category->getUpdateTime());
         
         $this->assertNull($this->category->getUpdateTime());
         
@@ -206,8 +194,6 @@ class CategoryTest extends TestCase
 
     public function testRetrievePlainArray(): void
     {
-        $this->markTestSkipped('Method retrievePlainArray not implemented in Category yet');
-        
         $this->category->setName('测试分类');
         $this->category->setDescription('这是一个测试分类的描述');
         $this->category->setValid(true);

@@ -181,8 +181,6 @@ class AssignLogTest extends TestCase
         $this->assignLog->setUnassignTime($unassignTime);
         
         $array = $this->assignLog->retrievePlainArray();
-        
-        $this->assertIsArray($array);
         $this->assertArrayHasKey('id', $array);
         $this->assertArrayHasKey('valid', $array);
         $this->assertArrayHasKey('user', $array);

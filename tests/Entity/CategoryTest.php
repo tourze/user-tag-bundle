@@ -204,8 +204,6 @@ class CategoryTest extends TestCase
         $this->category->setUpdateTime($now);
         
         $array = $this->category->retrievePlainArray();
-        
-        $this->assertIsArray($array);
         $this->assertArrayHasKey('id', $array);
         $this->assertArrayHasKey('name', $array);
         $this->assertArrayHasKey('description', $array);

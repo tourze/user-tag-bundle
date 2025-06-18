@@ -106,7 +106,6 @@ class DiyPageTagProviderTest extends TestCase
         $result = iterator_to_array($this->tagProvider->genSelectData());
 
         // 验证结果
-        $this->assertIsArray($result);
         $this->assertCount(0, $result);
     }
 } 

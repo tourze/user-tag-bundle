@@ -55,7 +55,7 @@ class GetUserTagList extends BaseProcedure
         // 所属目录
         if (!empty($this->categories)) {
             $categories = $this->categoryRepository->findBy(['id' => $this->categories]);
-            if (empty($categories)) {
+            if ((bool) empty($categories)) {
                 $qb->andWhere('0=1');
             } else {
                 $qb->andWhere('a.category IN (:categories)')->setParameter('categories', $categories);
@@ -88,14 +88,14 @@ class GetUserTagList extends BaseProcedure
 
             if (TagType::SqlTag === $tag->getType()) {
                 $rule = $this->sqlRuleRepository->findOneBy(['tag' => $tag]);
-                if ($rule) {
+                if ((bool) $rule) {
                     $tmp['sqlRule'] = $rule->toArray();
                 }
             }
 
             if (TagType::SmartTag === $tag->getType()) {
                 $rule = $this->smartRuleRepository->findOneBy(['tag' => $tag]);
-                if ($rule) {
+                if ((bool) $rule) {
                     $tmp['smartRule'] = $rule->toArray();
                 }
             }

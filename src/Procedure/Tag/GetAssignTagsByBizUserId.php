@@ -44,7 +44,7 @@ class GetAssignTagsByBizUserId extends LockableProcedure
         if ($this->type) {
             foreach ($this->type as $item) {
                 $tmp = TagType::tryFrom($item);
-                if ($tmp) {
+                if ((bool) $tmp) {
                     $type[] = $tmp;
                 }
             }
@@ -55,7 +55,7 @@ class GetAssignTagsByBizUserId extends LockableProcedure
             ->where('a.user = :user')
             ->setParameter('user', $user);
 
-        if ($type) {
+        if ((bool) $type) {
             $query->innerJoin('a.tag', 't')
                 ->andWhere('t.type in (:type)')
                 ->setParameter('type', $type);

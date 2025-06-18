@@ -71,7 +71,7 @@ class CreateSingleUserTag extends LockableProcedure
         $tag->setName($name);
         $tag->setType($type);
         $tag->setDescription($description);
-        if ($categoryId) {
+        if ((bool) $categoryId) {
             $category = $this->categoryRepository->find($categoryId);
             if (!$category) {
                 throw new ApiException('找不到指定分类');

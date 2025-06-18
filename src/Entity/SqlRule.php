@@ -9,28 +9,15 @@ use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineUserBundle\Attribute\CreatedByColumn;
 use Tourze\DoctrineUserBundle\Attribute\UpdatedByColumn;
 use Tourze\EasyAdmin\Attribute\Action\Copyable;
-use Tourze\EasyAdmin\Attribute\Action\Creatable;
-use Tourze\EasyAdmin\Attribute\Action\Deletable;
-use Tourze\EasyAdmin\Attribute\Action\Editable;
 use Tourze\EasyAdmin\Attribute\Action\Exportable;
-use Tourze\EasyAdmin\Attribute\Column\ExportColumn;
-use Tourze\EasyAdmin\Attribute\Column\ListColumn;
-use Tourze\EasyAdmin\Attribute\Field\FormField;
-use Tourze\EasyAdmin\Attribute\Permission\AsPermission;
 use UserTagBundle\Repository\SqlRuleRepository;
 
-#[AsPermission(title: 'SQL规则')]
-#[Deletable]
-#[Editable]
-#[Creatable]
 #[Copyable]
 #[Exportable]
 #[ORM\Entity(repositoryClass: SqlRuleRepository::class)]
 #[ORM\Table(name: 'ims_user_tag_sql_rule', options: ['comment' => 'SQL规则'])]
 class SqlRule implements Arrayable
 {
-    #[ListColumn(order: -1)]
-    #[ExportColumn]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER, options: ['comment' => 'ID'])]
@@ -43,25 +30,18 @@ class SqlRule implements Arrayable
     use TimestampableAware;
 
     #[CreatedByColumn]
-    #[ORM\Column(nullable: true, options: ['comment' => '创建人'])]
     private ?string $createdBy = null;
 
     #[UpdatedByColumn]
-    #[ORM\Column(nullable: true, options: ['comment' => '更新人'])]
     private ?string $updatedBy = null;
 
-    #[ListColumn(title: '标签')]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(unique: true, nullable: false, onDelete: 'CASCADE')]
     private Tag $tag;
 
-    #[ListColumn]
-    #[FormField]
     #[ORM\Column(length: 60, options: ['comment' => '定时表达式'])]
     private string $cronStatement;
 
-    #[ListColumn]
-    #[FormField]
     #[ORM\Column(length: 2000, options: ['comment' => 'SQL语句'])]
     private string $sqlStatement;
 

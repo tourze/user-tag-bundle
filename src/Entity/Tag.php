@@ -6,19 +6,12 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Tourze\Arrayable\PlainArrayInterface;
-use Tourze\DoctrineIndexedBundle\Attribute\IndexColumn;
 use Tourze\DoctrineIpBundle\Attribute\CreateIpColumn;
 use Tourze\DoctrineIpBundle\Attribute\UpdateIpColumn;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineTrackBundle\Attribute\TrackColumn;
 use Tourze\DoctrineUserBundle\Attribute\CreatedByColumn;
 use Tourze\DoctrineUserBundle\Attribute\UpdatedByColumn;
-use Tourze\EasyAdmin\Attribute\Column\BoolColumn;
-use Tourze\EasyAdmin\Attribute\Column\CopyColumn;
-use Tourze\EasyAdmin\Attribute\Column\ExportColumn;
-use Tourze\EasyAdmin\Attribute\Column\ListColumn;
-use Tourze\EasyAdmin\Attribute\Field\FormField;
-use Tourze\EasyAdmin\Attribute\Filter\Keyword;
 use Tourze\UserTagContracts\TagInterface;
 use UserTagBundle\Enum\TagType;
 use UserTagBundle\Repository\TagRepository;
@@ -29,68 +22,38 @@ use UserTagBundle\Repository\TagRepository;
 class Tag implements \Stringable, PlainArrayInterface, TagInterface
 {
     use TimestampableAware;
-    #[ListColumn(order: -1)]
-    #[ExportColumn]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER, options: ['comment' => 'ID'])]
     private ?int $id = 0;
 
-    #[BoolColumn]
-    #[IndexColumn]
     #[TrackColumn]
-    #[ORM\Column(type: Types::BOOLEAN, nullable: true, options: ['comment' => '有效', 'default' => 0])]
-    #[ListColumn(order: 97)]
-    #[FormField(order: 97)]
     private ?bool $valid = false;
 
     #[Groups(['restful_read', 'restful_write'])]
-    #[FormField(title: '所属分类', span: 10)]
-    #[Keyword]
-    #[ExportColumn]
-    #[CopyColumn(suffix: false)]
-    #[ListColumn(title: '所属分类')]
     #[ORM\ManyToOne(inversedBy: 'tags')]
     private ?Category $category = null;
 
     #[Groups(['restful_read', 'restful_write'])]
-    #[ListColumn]
-    #[FormField]
     #[ORM\Column(length: 40, nullable: true, enumType: TagType::class, options: ['comment' => '类型'])]
     private ?TagType $type = TagType::StaticTag;
 
     #[Groups(['restful_read', 'restful_write'])]
-    #[FormField(span: 10)]
-    #[Keyword]
-    #[ExportColumn]
-    #[CopyColumn(suffix: true)]
-    #[ListColumn]
-    #[ORM\Column(type: Types::STRING, length: 100, options: ['comment' => '标签名'])]
     private string $name;
 
     #[Groups(['restful_read', 'restful_write'])]
-    #[FormField]
-    #[Keyword]
-    #[ExportColumn]
-    #[CopyColumn]
-    #[ListColumn]
-    #[ORM\Column(type: Types::TEXT, nullable: true, options: ['comment' => '描述'])]
     private ?string $description = null;
 
     #[CreatedByColumn]
-    #[ORM\Column(nullable: true, options: ['comment' => '创建人'])]
     private ?string $createdBy = null;
 
     #[UpdatedByColumn]
-    #[ORM\Column(nullable: true, options: ['comment' => '更新人'])]
     private ?string $updatedBy = null;
 
     #[CreateIpColumn]
-    #[ORM\Column(length: 128, nullable: true, options: ['comment' => '创建时IP'])]
     private ?string $createdFromIp = null;
 
     #[UpdateIpColumn]
-    #[ORM\Column(length: 128, nullable: true, options: ['comment' => '更新时IP'])]
     private ?string $updatedFromIp = null;
 
     public function __toString(): string

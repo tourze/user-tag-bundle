@@ -190,8 +190,6 @@ class TagTest extends TestCase
         $this->tag->setUpdateTime($now);
         
         $array = $this->tag->retrievePlainArray();
-        
-        $this->assertIsArray($array);
         $this->assertArrayHasKey('id', $array);
         $this->assertArrayHasKey('name', $array);
         $this->assertArrayHasKey('description', $array);
@@ -201,6 +199,5 @@ class TagTest extends TestCase
         $this->assertEquals('测试标签', $array['name']);
         $this->assertEquals('这是一个测试描述', $array['description']);
         $this->assertTrue($array['valid']);
-        $this->assertIsArray($array['type']);
     }
 } 

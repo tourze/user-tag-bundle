@@ -124,7 +124,7 @@ class CategoryTest extends TestCase
     {
         $this->assertNull($this->category->getCreateTime());
         
-        $now = new \DateTime();
+        $now = new \DateTimeImmutable();
         $this->category->setCreateTime($now);
         $this->assertSame($now, $this->category->getCreateTime());
         
@@ -138,7 +138,7 @@ class CategoryTest extends TestCase
         
         $this->assertNull($this->category->getUpdateTime());
         
-        $now = new \DateTime();
+        $now = new \DateTimeImmutable();
         $this->category->setUpdateTime($now);
         $this->assertSame($now, $this->category->getUpdateTime());
         
@@ -199,7 +199,7 @@ class CategoryTest extends TestCase
         $this->category->setValid(true);
         $this->category->setMutex(true);
         
-        $now = new \DateTime();
+        $now = new \DateTimeImmutable();
         $this->category->setCreateTime($now);
         $this->category->setUpdateTime($now);
         

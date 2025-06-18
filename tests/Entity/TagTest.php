@@ -131,7 +131,7 @@ class TagTest extends TestCase
     {
         $this->assertNull($this->tag->getCreateTime());
         
-        $now = new \DateTime();
+        $now = new \DateTimeImmutable();
         $this->tag->setCreateTime($now);
         $this->assertSame($now, $this->tag->getCreateTime());
         
@@ -143,7 +143,7 @@ class TagTest extends TestCase
     {
         $this->assertNull($this->tag->getUpdateTime());
         
-        $now = new \DateTime();
+        $now = new \DateTimeImmutable();
         $this->tag->setUpdateTime($now);
         $this->assertSame($now, $this->tag->getUpdateTime());
         
@@ -185,7 +185,7 @@ class TagTest extends TestCase
         $category->setName('测试分类');
         $this->tag->setCategory($category);
         
-        $now = new \DateTime();
+        $now = new \DateTimeImmutable();
         $this->tag->setCreateTime($now);
         $this->tag->setUpdateTime($now);
         

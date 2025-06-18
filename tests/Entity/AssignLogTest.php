@@ -71,7 +71,7 @@ class AssignLogTest extends TestCase
     {
         $this->assertNull($this->assignLog->getAssignTime());
         
-        $now = new \DateTime();
+        $now = new \DateTimeImmutable();
         $this->assignLog->setAssignTime($now);
         $this->assertSame($now, $this->assignLog->getAssignTime());
         
@@ -83,7 +83,7 @@ class AssignLogTest extends TestCase
     {
         $this->assertNull($this->assignLog->getUnassignTime());
         
-        $now = new \DateTime();
+        $now = new \DateTimeImmutable();
         $this->assignLog->setUnassignTime($now);
         $this->assertSame($now, $this->assignLog->getUnassignTime());
         
@@ -143,7 +143,7 @@ class AssignLogTest extends TestCase
     {
         $this->assertNull($this->assignLog->getCreateTime());
         
-        $now = new \DateTime();
+        $now = new \DateTimeImmutable();
         $this->assignLog->setCreateTime($now);
         $this->assertSame($now, $this->assignLog->getCreateTime());
         
@@ -155,7 +155,7 @@ class AssignLogTest extends TestCase
     {
         $this->assertNull($this->assignLog->getUpdateTime());
         
-        $now = new \DateTime();
+        $now = new \DateTimeImmutable();
         $this->assignLog->setUpdateTime($now);
         $this->assertSame($now, $this->assignLog->getUpdateTime());
         
@@ -175,8 +175,8 @@ class AssignLogTest extends TestCase
         $this->assignLog->setTag($tag);
         $this->assignLog->setValid(true);
         
-        $assignTime = new \DateTime('2023-01-01 10:00:00');
-        $unassignTime = new \DateTime('2023-01-02 10:00:00');
+        $assignTime = new \DateTimeImmutable('2023-01-01 10:00:00');
+        $unassignTime = new \DateTimeImmutable('2023-01-02 10:00:00');
         $this->assignLog->setAssignTime($assignTime);
         $this->assignLog->setUnassignTime($unassignTime);
         

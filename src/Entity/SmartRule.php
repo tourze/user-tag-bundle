@@ -8,12 +8,8 @@ use Tourze\Arrayable\Arrayable;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineUserBundle\Attribute\CreatedByColumn;
 use Tourze\DoctrineUserBundle\Attribute\UpdatedByColumn;
-use Tourze\EasyAdmin\Attribute\Action\Copyable;
-use Tourze\EasyAdmin\Attribute\Action\Exportable;
 use UserTagBundle\Repository\SmartRuleRepository;
 
-#[Copyable]
-#[Exportable]
 #[ORM\Entity(repositoryClass: SmartRuleRepository::class)]
 #[ORM\Table(name: 'ims_user_tag_smart_rule', options: ['comment' => '智能规则'])]
 class SmartRule implements Arrayable

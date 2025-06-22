@@ -8,12 +8,8 @@ use Tourze\Arrayable\Arrayable;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineUserBundle\Attribute\CreatedByColumn;
 use Tourze\DoctrineUserBundle\Attribute\UpdatedByColumn;
-use Tourze\EasyAdmin\Attribute\Action\Copyable;
-use Tourze\EasyAdmin\Attribute\Action\Exportable;
 use UserTagBundle\Repository\SqlRuleRepository;
 
-#[Copyable]
-#[Exportable]
 #[ORM\Entity(repositoryClass: SqlRuleRepository::class)]
 #[ORM\Table(name: 'ims_user_tag_sql_rule', options: ['comment' => 'SQL规则'])]
 class SqlRule implements Arrayable

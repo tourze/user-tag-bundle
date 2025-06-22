@@ -12,12 +12,8 @@ use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineTrackBundle\Attribute\TrackColumn;
 use Tourze\DoctrineUserBundle\Attribute\CreatedByColumn;
 use Tourze\DoctrineUserBundle\Attribute\UpdatedByColumn;
-use Tourze\EasyAdmin\Attribute\Action\Copyable;
-use Tourze\EasyAdmin\Attribute\Action\Exportable;
 use UserTagBundle\Repository\AssignLogRepository;
 
-#[Copyable]
-#[Exportable]
 #[ORM\Entity(repositoryClass: AssignLogRepository::class)]
 #[ORM\Table(name: 'crm_tag_user', options: ['comment' => '打标记录'])]
 #[ORM\UniqueConstraint(name: 'crm_tag_user_idx_uniq', columns: ['tag_id', 'user_id'])]

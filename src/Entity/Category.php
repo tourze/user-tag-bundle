@@ -16,13 +16,9 @@ use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineTrackBundle\Attribute\TrackColumn;
 use Tourze\DoctrineUserBundle\Attribute\CreatedByColumn;
 use Tourze\DoctrineUserBundle\Attribute\UpdatedByColumn;
-use Tourze\EasyAdmin\Attribute\Action\Copyable;
-use Tourze\EasyAdmin\Attribute\Action\Exportable;
 use Tourze\EasyAdmin\Attribute\Column\TreeView;
 use UserTagBundle\Repository\CategoryRepository;
 
-#[Copyable]
-#[Exportable]
 #[TreeView(dataModel: Category::class, targetAttribute: 'parent')]
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ORM\Table(name: 'crm_tag_category', options: ['comment' => '标签分组'])]

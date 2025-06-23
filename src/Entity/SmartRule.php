@@ -6,30 +6,33 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Tourze\Arrayable\Arrayable;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
-use Tourze\DoctrineUserBundle\Attribute\CreatedByColumn;
-use Tourze\DoctrineUserBundle\Attribute\UpdatedByColumn;
+use Tourze\DoctrineUserBundle\Traits\BlameableAware;
 use UserTagBundle\Repository\SmartRuleRepository;
 
 #[ORM\Entity(repositoryClass: SmartRuleRepository::class)]
 #[ORM\Table(name: 'ims_user_tag_smart_rule', options: ['comment' => '智能规则'])]
-class SmartRule implements Arrayable
+class SmartRule implements \Stringable, Arrayable
 {
+    use TimestampableAware;
+    use BlameableAware;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER, options: ['comment' => 'ID'])]
     private ?int $id = 0;
 
+    public function __toString(): string
+    {
+        if ($this->getId() === null || $this->getId() === 0) {
+            return '';
+        }
+
+        return sprintf('SmartRule #%d', $this->getId());
+    }
+
     public function getId(): ?int
     {
         return $this->id;
     }
-    use TimestampableAware;
-
-    #[CreatedByColumn]
-    private ?string $createdBy = null;
-
-    #[UpdatedByColumn]
-    private ?string $updatedBy = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(unique: true, nullable: false, onDelete: 'CASCADE')]
@@ -41,29 +44,6 @@ class SmartRule implements Arrayable
     #[ORM\Column(type: Types::JSON, options: ['comment' => 'JSON规则'])]
     private array $jsonStatement;
 
-    public function setCreatedBy(?string $createdBy): self
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    public function getCreatedBy(): ?string
-    {
-        return $this->createdBy;
-    }
-
-    public function setUpdatedBy(?string $updatedBy): self
-    {
-        $this->updatedBy = $updatedBy;
-
-        return $this;
-    }
-
-    public function getUpdatedBy(): ?string
-    {
-        return $this->updatedBy;
-    }
 
     public function getTag(): Tag
     {

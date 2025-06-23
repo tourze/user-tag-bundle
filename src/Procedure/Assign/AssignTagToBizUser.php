@@ -37,12 +37,12 @@ class AssignTagToBizUser extends LockableProcedure
     public function execute(): array
     {
         $user = $this->userLoader->loadUserByIdentifier($this->userId);
-        if (!$user) {
+        if ($user === null) {
             throw new ApiException('找不到指定用户');
         }
 
         $tag = $this->tagRepository->find($this->tagId);
-        if (!$tag) {
+        if ($tag === null) {
             throw new ApiException('找不到指定标签');
         }
 

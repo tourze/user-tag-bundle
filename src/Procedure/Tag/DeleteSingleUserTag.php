@@ -32,7 +32,7 @@ class DeleteSingleUserTag extends LockableProcedure
     public function execute(): array
     {
         $tag = $this->tagRepository->find($this->id);
-        if (!$tag) {
+        if ($tag === null) {
             throw new ApiException('找不到标签');
         }
 

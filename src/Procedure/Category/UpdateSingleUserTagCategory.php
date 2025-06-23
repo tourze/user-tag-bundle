@@ -41,15 +41,15 @@ class UpdateSingleUserTagCategory extends LockableProcedure
     public function execute(): array
     {
         $category = $this->categoryRepository->find($this->id);
-        if (!$category) {
+        if ($category === null) {
             throw new ApiException('找不到分类');
         }
         $category->setName($this->name);
         $category->setMutex($this->mutex);
 
-        if ($this->parentId) {
+        if ($this->parentId !== null) {
             $parent = $this->categoryRepository->find($this->parentId);
-            if (!$parent) {
+            if ($parent === null) {
                 throw new ApiException('找不到上级分类');
             }
             $category->setParent($parent);

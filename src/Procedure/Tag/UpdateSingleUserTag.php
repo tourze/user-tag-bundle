@@ -50,15 +50,15 @@ class UpdateSingleUserTag extends LockableProcedure
     public function execute(): array
     {
         $tag = $this->tagRepository->find($this->id);
-        if (!$tag) {
+        if ($tag === null) {
             throw new ApiException('找不到标签');
         }
         $tag->setName($this->name);
         $tag->setType(TagType::tryFrom($this->type));
         $tag->setDescription($this->description);
-        if ($this->categoryId) {
+        if ($this->categoryId !== null) {
             $category = $this->categoryRepository->find($this->categoryId);
-            if (!$category) {
+            if ($category === null) {
                 throw new ApiException('找不到指定分类');
             }
             $tag->setCategory($category);

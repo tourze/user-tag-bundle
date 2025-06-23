@@ -17,6 +17,6 @@ class UserTagBundleTest extends TestCase
     public function testGetBundleDependenciesReturnsArray(): void
     {
         $dependencies = UserTagBundle::getBundleDependencies();
-        $this->assertIsArray($dependencies);
+        $this->assertSame([], $dependencies);
     }
 } 

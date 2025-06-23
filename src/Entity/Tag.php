@@ -10,8 +10,7 @@ use Tourze\DoctrineIpBundle\Attribute\CreateIpColumn;
 use Tourze\DoctrineIpBundle\Attribute\UpdateIpColumn;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineTrackBundle\Attribute\TrackColumn;
-use Tourze\DoctrineUserBundle\Attribute\CreatedByColumn;
-use Tourze\DoctrineUserBundle\Attribute\UpdatedByColumn;
+use Tourze\DoctrineUserBundle\Traits\BlameableAware;
 use Tourze\UserTagContracts\TagInterface;
 use UserTagBundle\Enum\TagType;
 use UserTagBundle\Repository\TagRepository;
@@ -22,6 +21,8 @@ use UserTagBundle\Repository\TagRepository;
 class Tag implements \Stringable, PlainArrayInterface, TagInterface
 {
     use TimestampableAware;
+    use BlameableAware;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER, options: ['comment' => 'ID'])]
@@ -35,8 +36,8 @@ class Tag implements \Stringable, PlainArrayInterface, TagInterface
     private ?Category $category = null;
 
     #[Groups(['restful_read', 'restful_write'])]
-    #[ORM\Column(length: 40, nullable: true, enumType: TagType::class, options: ['comment' => '类型'])]
-    private ?TagType $type = TagType::StaticTag;
+    #[ORM\Column(length: 40, nullable: false, enumType: TagType::class, options: ['comment' => '类型', 'default' => 'static'])]
+    private TagType $type = TagType::StaticTag;
 
     #[Groups(['restful_read', 'restful_write'])]
     private string $name;
@@ -44,11 +45,6 @@ class Tag implements \Stringable, PlainArrayInterface, TagInterface
     #[Groups(['restful_read', 'restful_write'])]
     private ?string $description = null;
 
-    #[CreatedByColumn]
-    private ?string $createdBy = null;
-
-    #[UpdatedByColumn]
-    private ?string $updatedBy = null;
 
     #[CreateIpColumn]
     private ?string $createdFromIp = null;
@@ -58,7 +54,7 @@ class Tag implements \Stringable, PlainArrayInterface, TagInterface
 
     public function __toString(): string
     {
-        if (!$this->getId()) {
+        if ($this->getId() === null || $this->getId() === 0) {
             return '';
         }
 
@@ -130,29 +126,6 @@ class Tag implements \Stringable, PlainArrayInterface, TagInterface
         return $this;
     }
 
-    public function setCreatedBy(?string $createdBy): self
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    public function getCreatedBy(): ?string
-    {
-        return $this->createdBy;
-    }
-
-    public function setUpdatedBy(?string $updatedBy): self
-    {
-        $this->updatedBy = $updatedBy;
-
-        return $this;
-    }
-
-    public function getUpdatedBy(): ?string
-    {
-        return $this->updatedBy;
-    }
 
     public function setCreatedFromIp(?string $createdFromIp): self
     {
@@ -184,7 +157,7 @@ class Tag implements \Stringable, PlainArrayInterface, TagInterface
             'updateTime' => $this->getUpdateTime()?->format('Y-m-d H:i:s'),
             'name' => $this->getName(),
             'description' => $this->getDescription(),
-            'type' => $this->getType()?->toArray(),
+            'type' => $this->getType()->toArray(),
             'category' => $this->getCategory()?->retrievePlainArray(),
             'valid' => $this->isValid(),
         ];

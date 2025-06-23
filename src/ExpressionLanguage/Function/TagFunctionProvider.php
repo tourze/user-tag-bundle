@@ -42,7 +42,7 @@ class TagFunctionProvider implements ExpressionFunctionProviderInterface
      */
     public function checkCrmCustomerHasTag(array $values, ?UserInterface $user, string $tagName, string $tagCategory = ''): bool
     {
-        if (!$user) {
+        if ($user === null) {
             return false;
         }
         $tag = $this->userTagService->getTagByName($tagName, $tagCategory);

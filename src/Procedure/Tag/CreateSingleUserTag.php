@@ -14,7 +14,6 @@ use Tourze\JsonRPCLogBundle\Attribute\Log;
 use UserTagBundle\Entity\Tag;
 use UserTagBundle\Enum\TagType;
 use UserTagBundle\Repository\CategoryRepository;
-use UserTagBundle\Repository\TagRepository;
 
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 #[MethodTag('用户标签')]
@@ -39,7 +38,6 @@ class CreateSingleUserTag extends LockableProcedure
     public ?string $categoryId = null;
 
     public function __construct(
-        private readonly TagRepository $tagRepository,
         private readonly CategoryRepository $categoryRepository,
         private readonly EntityManagerInterface $entityManager,
     ) {
@@ -71,9 +69,9 @@ class CreateSingleUserTag extends LockableProcedure
         $tag->setName($name);
         $tag->setType($type);
         $tag->setDescription($description);
-        if ((bool) $categoryId) {
+        if ($categoryId !== null) {
             $category = $this->categoryRepository->find($categoryId);
-            if (!$category) {
+            if ($category === null) {
                 throw new ApiException('找不到指定分类');
             }
             $tag->setCategory($category);

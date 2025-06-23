@@ -32,7 +32,7 @@ class DeleteUserTagCategory extends LockableProcedure
     public function execute(): array
     {
         $category = $this->categoryRepository->find($this->id);
-        if (!$category) {
+        if ($category === null) {
             throw new ApiException('找不到分类');
         }
 

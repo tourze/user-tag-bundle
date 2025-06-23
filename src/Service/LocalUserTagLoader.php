@@ -2,7 +2,7 @@
 
 namespace UserTagBundle\Service;
 
-use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -71,13 +71,13 @@ class LocalUserTagLoader implements TagLoaderInterface
         }
         $this->entityManager->flush();
 
-        if (!$assignLog) {
+        if ($assignLog === null) {
             $assignLog = new AssignLog();
         }
         $assignLog->setUser($user);
         $assignLog->setTag($tag);
         $assignLog->setValid(true);
-        $assignLog->setAssignTime(Carbon::now());
+        $assignLog->setAssignTime(CarbonImmutable::now());
         $this->entityManager->persist($assignLog);
         $this->entityManager->flush();
 
@@ -95,13 +95,13 @@ class LocalUserTagLoader implements TagLoaderInterface
             'tag' => $tag,
         ]);
 
-        if (!$assignLog) {
+        if ($assignLog === null) {
             $assignLog = new AssignLog();
         }
         $assignLog->setUser($user);
         $assignLog->setTag($tag);
         $assignLog->setValid(false);
-        $assignLog->setUnassignTime(Carbon::now());
+        $assignLog->setUnassignTime(CarbonImmutable::now());
         $this->entityManager->persist($assignLog);
         $this->entityManager->flush();
 
@@ -119,7 +119,7 @@ class LocalUserTagLoader implements TagLoaderInterface
                 'name' => $categoryName,
                 'valid' => true,
             ]);
-            if (!$category) {
+            if ($category === null) {
                 $category = new Category();
                 $category->setName($categoryName);
                 $category->setValid(true);
@@ -129,7 +129,7 @@ class LocalUserTagLoader implements TagLoaderInterface
         }
 
         $tag = $this->tagRepository->findOneBy(['name' => $name, 'category' => $category]);
-        if (!$tag) {
+        if ($tag === null) {
             $tag = new Tag();
             $tag->setName($name);
             $tag->setCategory($category);

@@ -35,7 +35,7 @@ class ServerAssignCrmTag extends LockableProcedure
     public function execute(): array
     {
         $user = $this->userLoader->loadUserByIdentifier($this->identity);
-        if (!$user) {
+        if ($user === null) {
             throw new ApiException('找不到用户信息');
         }
 
@@ -43,7 +43,7 @@ class ServerAssignCrmTag extends LockableProcedure
             'id' => $this->tagId,
             'valid' => true,
         ]);
-        if (!$tag) {
+        if ($tag === null) {
             throw new ApiException('找不到标签信息');
         }
 

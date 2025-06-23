@@ -41,9 +41,9 @@ class CreateSingleUserTagCategory extends LockableProcedure
         $category = new Category();
         $category->setName($this->name);
         $category->setMutex($this->mutex);
-        if ($this->parentId) {
+        if ($this->parentId !== null) {
             $parent = $this->categoryRepository->find($this->parentId);
-            if (!$parent) {
+            if ($parent === null) {
                 throw new ApiException('找不到上级分类');
             }
             $category->setParent($parent);

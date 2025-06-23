@@ -13,8 +13,6 @@ use Tourze\JsonRPCPaginatorBundle\Procedure\PaginatorTrait;
 use Tourze\UserIDBundle\Service\UserIdentityService;
 use UserTagBundle\Entity\AssignLog;
 use UserTagBundle\Repository\AssignLogRepository;
-use UserTagBundle\Repository\TagRepository;
-use UserTagBundle\Service\LocalUserTagLoader;
 
 #[MethodTag('用户标签')]
 #[MethodDoc('为指定身份打标签')]
@@ -31,8 +29,6 @@ class ServerGetAssignedTagsByIdentity extends LockableProcedure
     public string $identityValue;
 
     public function __construct(
-        private readonly LocalUserTagLoader $userTagService,
-        private readonly TagRepository $tagRepository,
         private readonly UserIdentityService $userIdentityService,
         private readonly AssignLogRepository $assignLogRepository,
     ) {
@@ -41,7 +37,7 @@ class ServerGetAssignedTagsByIdentity extends LockableProcedure
     public function execute(): array
     {
         $user = $this->userIdentityService->findByType($this->identityType, $this->identityValue);
-        if (!$user) {
+        if ($user === null) {
             throw new ApiException('找不到用户信息');
         }
 

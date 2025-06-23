@@ -10,16 +10,16 @@ use Tourze\Arrayable\PlainArrayInterface;
 use Tourze\DoctrineSnowflakeBundle\Service\SnowflakeIdGenerator;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineTrackBundle\Attribute\TrackColumn;
-use Tourze\DoctrineUserBundle\Attribute\CreatedByColumn;
-use Tourze\DoctrineUserBundle\Attribute\UpdatedByColumn;
+use Tourze\DoctrineUserBundle\Traits\BlameableAware;
 use UserTagBundle\Repository\AssignLogRepository;
 
 #[ORM\Entity(repositoryClass: AssignLogRepository::class)]
 #[ORM\Table(name: 'crm_tag_user', options: ['comment' => '打标记录'])]
 #[ORM\UniqueConstraint(name: 'crm_tag_user_idx_uniq', columns: ['tag_id', 'user_id'])]
-class AssignLog implements ApiArrayInterface, PlainArrayInterface
+class AssignLog implements \Stringable, ApiArrayInterface, PlainArrayInterface
 {
     use TimestampableAware;
+    use BlameableAware;
 
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
@@ -44,46 +44,30 @@ class AssignLog implements ApiArrayInterface, PlainArrayInterface
     #[TrackColumn]
     private ?bool $valid = false;
 
-    #[CreatedByColumn]
-    private ?string $createdBy = null;
-
-    #[UpdatedByColumn]
-    private ?string $updatedBy = null;
-
     #[ORM\Column(nullable: true, options: ['comment' => '创建IP'])]
     private ?string $createdFromIp = null;
 
     #[ORM\Column(nullable: true, options: ['comment' => '更新IP'])]
     private ?string $updatedFromIp = null;
 
+    public function __toString(): string
+    {
+        if ($this->getId() === null || $this->getId() === '') {
+            return '';
+        }
+
+        return sprintf(
+            '%s - %s',
+            $this->getTag()?->getName() ?? 'No Tag',
+            $this->getUser()->getUserIdentifier()
+        );
+    }
+
     public function getId(): ?string
     {
         return $this->id;
     }
 
-    public function setCreatedBy(?string $createdBy): self
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    public function getCreatedBy(): ?string
-    {
-        return $this->createdBy;
-    }
-
-    public function setUpdatedBy(?string $updatedBy): self
-    {
-        $this->updatedBy = $updatedBy;
-
-        return $this;
-    }
-
-    public function getUpdatedBy(): ?string
-    {
-        return $this->updatedBy;
-    }
 
     public function setCreatedFromIp(?string $createdFromIp): self
     {
@@ -172,7 +156,7 @@ class AssignLog implements ApiArrayInterface, PlainArrayInterface
     public function retrieveApiArray(): array
     {
         $tag = [];
-        if ($this->getTag()) {
+        if ($this->getTag() !== null) {
             $tag = [
                 'id' => $this->getTag()->getId(),
                 'name' => $this->getTag()->getName(),
@@ -190,7 +174,7 @@ class AssignLog implements ApiArrayInterface, PlainArrayInterface
     public function retrievePlainArray(): array
     {
         $tag = null;
-        if ($this->getTag()) {
+        if ($this->getTag() !== null) {
             $tag = $this->getTag()->retrievePlainArray();
         }
 

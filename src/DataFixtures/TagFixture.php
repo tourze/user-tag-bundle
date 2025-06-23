@@ -5,6 +5,7 @@ namespace UserTagBundle\DataFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\HttpKernel\KernelInterface;
+use UserTagBundle\Entity\Category;
 use UserTagBundle\Entity\Tag;
 use Yiisoft\Json\Json;
 
@@ -53,11 +54,27 @@ class TagFixture extends Fixture
             ];
         }
 
-        foreach ($list as [$category, $name]) {
+        // 创建或获取分类
+        $categories = [];
+        foreach ($list as [$categoryName, $name]) {
+            if (!isset($categories[$categoryName])) {
+                $category = $manager->getRepository(Category::class)->findOneBy(['name' => $categoryName]);
+                if ($category === null) {
+                    $category = new Category();
+                    $category->setName($categoryName);
+                    $manager->persist($category);
+                }
+                $categories[$categoryName] = $category;
+            }
+        }
+
+        foreach ($list as [$categoryName, $name]) {
             $tag = new Tag();
-            $tag->setCategory($category);
+            $tag->setCategory($categories[$categoryName]);
             $tag->setName($name);
-            $this->addReference(Tag::class . '籍贯-广东省', $tag);
+            if ($name === '籍贯-广东省') {
+                $this->addReference(Tag::class . '籍贯-广东省', $tag);
+            }
             $manager->persist($tag);
         }
 

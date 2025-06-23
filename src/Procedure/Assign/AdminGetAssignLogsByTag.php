@@ -49,7 +49,9 @@ class AdminGetAssignLogsByTag extends BaseProcedure
             'id' => $assignLog->getId(),
             'createTime' => $assignLog->getCreateTime()?->format('Y-m-d H:i:s'),
             'updateTime' => $assignLog->getUpdateTime()?->format('Y-m-d H:i:s'),
-            'user' => $assignLog->getUser()->retrieveApiArray(),
+            'user' => [
+                'id' => $assignLog->getUser()->getUserIdentifier(),
+            ],
         ];
     }
 }

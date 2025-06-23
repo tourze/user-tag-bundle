@@ -34,9 +34,9 @@ class GetUserTagCategories extends BaseProcedure
             ->from(Category::class, 'a')
             ->select('a');
 
-        if ($this->parentId) {
+        if ($this->parentId !== null) {
             $parent = $this->categoryRepository->find($this->parentId);
-            if (!$parent) {
+            if ($parent === null) {
                 throw new ApiException('找不到上级分类');
             }
             $qb->where('a.parent=:parent')->setParameter('parent', $parent);

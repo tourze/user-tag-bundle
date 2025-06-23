@@ -37,14 +37,14 @@ class GetAssignTagsByBizUserId extends LockableProcedure
     public function execute(): array
     {
         $user = $this->userLoader->loadUserByIdentifier($this->userId);
-        if (!$user) {
+        if ($user === null) {
             throw new ApiException('用户不存在');
         }
         $type = [];
-        if ($this->type) {
+        if (!empty($this->type)) {
             foreach ($this->type as $item) {
                 $tmp = TagType::tryFrom($item);
-                if ((bool) $tmp) {
+                if ($tmp !== null) {
                     $type[] = $tmp;
                 }
             }
@@ -55,7 +55,7 @@ class GetAssignTagsByBizUserId extends LockableProcedure
             ->where('a.user = :user')
             ->setParameter('user', $user);
 
-        if ((bool) $type) {
+        if (!empty($type)) {
             $query->innerJoin('a.tag', 't')
                 ->andWhere('t.type in (:type)')
                 ->setParameter('type', $type);
@@ -67,15 +67,13 @@ class GetAssignTagsByBizUserId extends LockableProcedure
         /** @var AssignLog $log */
         foreach ($logs as $log) {
             $tag = $log->getTag();
-            if (!$tag) {
+            if ($tag === null) {
                 continue;
             }
             $list[] = [
                 'tagInfo' => $log->getTag()->retrievePlainArray(),
                 'userInfo' => [
-                    'id' => $user->getId(),
-                    'nickName' => $user->getNickName(),
-                    'username' => $user->getUsername(),
+                    'id' => $user->getUserIdentifier(),
                 ],
                 'assignTime' => $log->getAssignTime()?->format('Y-m-d H:i:s'),
                 'unassignTime' => $log->getUnassignTime()?->format('Y-m-d H:i:s'),

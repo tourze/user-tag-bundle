@@ -14,17 +14,15 @@ use Tourze\DoctrineIndexedBundle\Attribute\IndexColumn;
 use Tourze\DoctrineSnowflakeBundle\Service\SnowflakeIdGenerator;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineTrackBundle\Attribute\TrackColumn;
-use Tourze\DoctrineUserBundle\Attribute\CreatedByColumn;
-use Tourze\DoctrineUserBundle\Attribute\UpdatedByColumn;
-use Tourze\EasyAdmin\Attribute\Column\TreeView;
+use Tourze\DoctrineUserBundle\Traits\BlameableAware;
 use UserTagBundle\Repository\CategoryRepository;
 
-#[TreeView(dataModel: Category::class, targetAttribute: 'parent')]
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ORM\Table(name: 'crm_tag_category', options: ['comment' => '标签分组'])]
 class Category implements \Stringable, AdminArrayInterface, PlainArrayInterface
 {
     use TimestampableAware;
+    use BlameableAware;
 
     /**
      * order值大的排序靠前。有效的值范围是[0, 2^32].
@@ -57,11 +55,6 @@ class Category implements \Stringable, AdminArrayInterface, PlainArrayInterface
     #[ORM\Column(type: Types::BIGINT, nullable: false, options: ['comment' => 'ID'])]
     private ?string $id = null;
 
-    #[CreatedByColumn]
-    private ?string $createdBy = null;
-
-    #[UpdatedByColumn]
-    private ?string $updatedBy = null;
 
     #[TrackColumn]
     private ?bool $valid = false;
@@ -104,7 +97,7 @@ class Category implements \Stringable, AdminArrayInterface, PlainArrayInterface
 
     public function __toString(): string
     {
-        if (!$this->getId()) {
+        if ($this->getId() === null) {
             return '';
         }
 
@@ -116,29 +109,6 @@ class Category implements \Stringable, AdminArrayInterface, PlainArrayInterface
         return $this->id;
     }
 
-    public function setCreatedBy(?string $createdBy): self
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    public function getCreatedBy(): ?string
-    {
-        return $this->createdBy;
-    }
-
-    public function setUpdatedBy(?string $updatedBy): self
-    {
-        $this->updatedBy = $updatedBy;
-
-        return $this;
-    }
-
-    public function getUpdatedBy(): ?string
-    {
-        return $this->updatedBy;
-    }
 
     public function isValid(): ?bool
     {

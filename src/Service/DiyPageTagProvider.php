@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Tourze\EnumExtra\SelectDataFetcher;
 use UserTagBundle\Entity\Tag;
 
-#[AutoconfigureTag('diy-page.tag.provider')]
+#[AutoconfigureTag(name: 'diy-page.tag.provider')]
 class DiyPageTagProvider implements SelectDataFetcher
 {
     public function __construct(

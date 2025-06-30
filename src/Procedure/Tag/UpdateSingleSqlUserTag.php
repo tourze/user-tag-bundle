@@ -16,35 +16,35 @@ use UserTagBundle\Repository\CategoryRepository;
 use UserTagBundle\Repository\SqlRuleRepository;
 use UserTagBundle\Repository\TagRepository;
 
-#[IsGranted('IS_AUTHENTICATED_FULLY')]
-#[MethodTag('用户标签')]
-#[MethodDoc('编辑单个SQL标签')]
-#[MethodExpose('UpdateSingleSqlUserTag')]
+#[IsGranted(attribute: 'IS_AUTHENTICATED_FULLY')]
+#[MethodTag(name: '用户标签')]
+#[MethodDoc(summary: '编辑单个SQL标签')]
+#[MethodExpose(method: 'UpdateSingleSqlUserTag')]
 #[Log]
 class UpdateSingleSqlUserTag extends LockableProcedure
 {
-    #[MethodParam('id')]
+    #[MethodParam(description: 'id')]
     public string $id;
 
-    #[MethodParam('SQL语句')]
+    #[MethodParam(description: 'SQL语句')]
     public string $sqlStatement;
 
-    #[MethodParam('频率/定时表达式')]
+    #[MethodParam(description: '频率/定时表达式')]
     public string $cronStatement;
 
-    #[MethodParam('用户标签名')]
+    #[MethodParam(description: '用户标签名')]
     public string $name;
 
-    #[MethodParam('标签类型')]
+    #[MethodParam(description: '标签类型')]
     public string $type;
 
-    #[MethodParam('是否有效')]
+    #[MethodParam(description: '是否有效')]
     public bool $valid;
 
-    #[MethodParam('描述')]
+    #[MethodParam(description: '描述')]
     public ?string $description = null;
 
-    #[MethodParam('目录ID')]
+    #[MethodParam(description: '目录ID')]
     public ?string $categoryId = null;
 
     public function __construct(

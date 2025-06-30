@@ -13,12 +13,12 @@ use Tourze\JsonRPC\Core\Procedure\BaseProcedure;
 use UserTagBundle\Entity\Category;
 use UserTagBundle\Repository\CategoryRepository;
 
-#[MethodTag('用户标签')]
-#[MethodDoc('获取标签分类')]
-#[MethodExpose('GetUserTagCategories')]
+#[MethodTag(name: '用户标签')]
+#[MethodDoc(summary: '获取标签分类')]
+#[MethodExpose(method: 'GetUserTagCategories')]
 class GetUserTagCategories extends BaseProcedure
 {
-    #[MethodParam('上级ID')]
+    #[MethodParam(description: '上级ID')]
     public ?string $parentId = null;
 
     public function __construct(

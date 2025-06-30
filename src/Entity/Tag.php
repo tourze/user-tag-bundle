@@ -31,18 +31,18 @@ class Tag implements \Stringable, PlainArrayInterface, TagInterface
     #[TrackColumn]
     private ?bool $valid = false;
 
-    #[Groups(['restful_read', 'restful_write'])]
+    #[Groups(groups: ['restful_read', 'restful_write'])]
     #[ORM\ManyToOne(inversedBy: 'tags')]
     private ?Category $category = null;
 
-    #[Groups(['restful_read', 'restful_write'])]
+    #[Groups(groups: ['restful_read', 'restful_write'])]
     #[ORM\Column(length: 40, nullable: false, enumType: TagType::class, options: ['comment' => '类型', 'default' => 'static'])]
     private TagType $type = TagType::StaticTag;
 
-    #[Groups(['restful_read', 'restful_write'])]
+    #[Groups(groups: ['restful_read', 'restful_write'])]
     private string $name;
 
-    #[Groups(['restful_read', 'restful_write'])]
+    #[Groups(groups: ['restful_read', 'restful_write'])]
     private ?string $description = null;
 
 

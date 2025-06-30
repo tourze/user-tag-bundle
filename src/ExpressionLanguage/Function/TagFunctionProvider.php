@@ -13,7 +13,7 @@ use UserTagBundle\Service\LocalUserTagLoader;
 /**
  * CRM标签相关函数
  */
-#[AutoconfigureTag('ecol.function.provider')]
+#[AutoconfigureTag(name: 'ecol.function.provider')]
 class TagFunctionProvider implements ExpressionFunctionProviderInterface
 {
     public function __construct(

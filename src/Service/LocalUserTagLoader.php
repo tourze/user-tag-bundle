@@ -37,7 +37,7 @@ class LocalUserTagLoader implements TagLoaderInterface
     /**
      * 为指定消费者打标
      */
-    #[Lockable('crm_tag_user_{{ user.id }}')]
+    #[Lockable(key: 'crm_tag_user_{{ user.id }}')]
     public function assignTag(UserInterface $user, Tag $tag): AssignLog
     {
         $event = new BeforeAddTagEvent();
@@ -87,7 +87,7 @@ class LocalUserTagLoader implements TagLoaderInterface
     /**
      * 解绑标签
      */
-    #[Lockable('crm_tag_user_{{ user.getUserIdentifier() }}')]
+    #[Lockable(key: 'crm_tag_user_{{ user.getUserIdentifier() }}')]
     public function unassignTag(UserInterface $user, Tag $tag): AssignLog
     {
         $assignLog = $this->assignLogRepository->findOneBy([

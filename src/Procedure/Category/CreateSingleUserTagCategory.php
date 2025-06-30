@@ -14,20 +14,20 @@ use Tourze\JsonRPCLogBundle\Attribute\Log;
 use UserTagBundle\Entity\Category;
 use UserTagBundle\Repository\CategoryRepository;
 
-#[IsGranted('IS_AUTHENTICATED_FULLY')]
-#[MethodTag('用户标签')]
-#[MethodDoc('创建单个标签分类')]
-#[MethodExpose('CreateSingleUserTagCategory')]
+#[IsGranted(attribute: 'IS_AUTHENTICATED_FULLY')]
+#[MethodTag(name: '用户标签')]
+#[MethodDoc(summary: '创建单个标签分类')]
+#[MethodExpose(method: 'CreateSingleUserTagCategory')]
 #[Log]
 class CreateSingleUserTagCategory extends LockableProcedure
 {
-    #[MethodParam('用户标签名')]
+    #[MethodParam(description: '用户标签名')]
     public string $name;
 
-    #[MethodParam('是否互斥分组')]
+    #[MethodParam(description: '是否互斥分组')]
     public bool $mutex = false;
 
-    #[MethodParam('上级分类ID')]
+    #[MethodParam(description: '上级分类ID')]
     public ?string $parentId = null;
 
     public function __construct(

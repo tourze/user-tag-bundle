@@ -12,6 +12,7 @@ use Tourze\Arrayable\AdminArrayInterface;
 use Tourze\Arrayable\PlainArrayInterface;
 use Tourze\DoctrineIndexedBundle\Attribute\IndexColumn;
 use Tourze\DoctrineSnowflakeBundle\Service\SnowflakeIdGenerator;
+use Tourze\DoctrineSnowflakeBundle\Traits\SnowflakeKeyAware;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineTrackBundle\Attribute\TrackColumn;
 use Tourze\DoctrineUserBundle\Traits\BlameableAware;
@@ -23,6 +24,7 @@ class Category implements \Stringable, AdminArrayInterface, PlainArrayInterface
 {
     use TimestampableAware;
     use BlameableAware;
+    use SnowflakeKeyAware;
 
     /**
      * order值大的排序靠前。有效的值范围是[0, 2^32].
@@ -49,38 +51,32 @@ class Category implements \Stringable, AdminArrayInterface, PlainArrayInterface
         ];
     }
 
-    #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(SnowflakeIdGenerator::class)]
-    #[ORM\Column(type: Types::BIGINT, nullable: false, options: ['comment' => 'ID'])]
-    private ?string $id = null;
-
 
     #[TrackColumn]
     private ?bool $valid = false;
 
     #[Ignore]
-    #[Groups(['restful_read', 'restful_write', 'api_tree'])]
+    #[Groups(groups: ['restful_read', 'restful_write', 'api_tree'])]
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'children')]
     #[ORM\JoinColumn(onDelete: 'SET NULL')]
     private ?Category $parent = null;
 
-    #[Groups(['api_tree'])]
+    #[Groups(groups: ['api_tree'])]
     #[ORM\OneToMany(mappedBy: 'parent', targetEntity: Category::class)]
     private Collection $children;
 
-    #[Groups(['restful_read', 'restful_write'])]
+    #[Groups(groups: ['restful_read', 'restful_write'])]
     private string $name;
 
     #[Ignore]
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Tag::class)]
     private Collection $tags;
 
-    #[Groups(['restful_read', 'restful_write'])]
+    #[Groups(groups: ['restful_read', 'restful_write'])]
     #[ORM\Column(nullable: true, options: ['comment' => '是否互斥分组'])]
     private ?bool $mutex = false;
 
-    #[Groups(['restful_read', 'restful_write'])]
+    #[Groups(groups: ['restful_read', 'restful_write'])]
     #[ORM\Column(type: Types::TEXT, nullable: true, options: ['comment' => '分组描述'])]
     private ?string $description = null;
 
@@ -103,12 +99,6 @@ class Category implements \Stringable, AdminArrayInterface, PlainArrayInterface
 
         return "{$this->getName()}";
     }
-
-    public function getId(): ?string
-    {
-        return $this->id;
-    }
-
 
     public function isValid(): ?bool
     {

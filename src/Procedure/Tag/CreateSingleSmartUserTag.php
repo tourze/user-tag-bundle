@@ -15,19 +15,19 @@ use Tourze\JsonRPCLogBundle\Attribute\Log;
 use UserTagBundle\Entity\SmartRule;
 use UserTagBundle\Enum\TagType;
 
-#[IsGranted('IS_AUTHENTICATED_FULLY')]
-#[MethodTag('用户标签')]
-#[MethodDoc('创建单个智能标签')]
-#[MethodExpose('CreateSingleSmartUserTag')]
+#[IsGranted(attribute: 'IS_AUTHENTICATED_FULLY')]
+#[MethodTag(name: '用户标签')]
+#[MethodDoc(summary: '创建单个智能标签')]
+#[MethodExpose(method: 'CreateSingleSmartUserTag')]
 #[Log]
 class CreateSingleSmartUserTag extends CreateSingleUserTag implements ServiceSubscriberInterface
 {
     use ServiceMethodsSubscriberTrait;
 
-    #[MethodParam('JSON表达式')]
+    #[MethodParam(description: 'JSON表达式')]
     public array $jsonStatement;
 
-    #[MethodParam('频率/定时表达式')]
+    #[MethodParam(description: '频率/定时表达式')]
     public string $cronStatement;
 
     public function execute(): array

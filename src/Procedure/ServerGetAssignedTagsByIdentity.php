@@ -14,18 +14,18 @@ use Tourze\UserIDBundle\Service\UserIdentityService;
 use UserTagBundle\Entity\AssignLog;
 use UserTagBundle\Repository\AssignLogRepository;
 
-#[MethodTag('用户标签')]
-#[MethodDoc('为指定身份打标签')]
-#[MethodExpose('ServerGetAssignedTagsByIdentity')]
+#[MethodTag(name: '用户标签')]
+#[MethodDoc(summary: '为指定身份打标签')]
+#[MethodExpose(method: 'ServerGetAssignedTagsByIdentity')]
 #[Log]
 class ServerGetAssignedTagsByIdentity extends LockableProcedure
 {
     use PaginatorTrait;
 
-    #[MethodParam('用户标识类型')]
+    #[MethodParam(description: '用户标识类型')]
     public string $identityType;
 
-    #[MethodParam('用户标识值')]
+    #[MethodParam(description: '用户标识值')]
     public string $identityValue;
 
     public function __construct(
@@ -36,10 +36,12 @@ class ServerGetAssignedTagsByIdentity extends LockableProcedure
 
     public function execute(): array
     {
-        $user = $this->userIdentityService->findByType($this->identityType, $this->identityValue);
-        if ($user === null) {
+        $identity = $this->userIdentityService->findByType($this->identityType, $this->identityValue);
+        if ($identity === null) {
             throw new ApiException('找不到用户信息');
         }
+        
+        $user = $identity->getUser();
 
         $qb = $this->assignLogRepository->createQueryBuilder('a')
             ->where('a.user = :user')

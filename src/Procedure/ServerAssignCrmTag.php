@@ -13,16 +13,16 @@ use Tourze\JsonRPCLogBundle\Attribute\Log;
 use UserTagBundle\Repository\TagRepository;
 use UserTagBundle\Service\LocalUserTagLoader;
 
-#[MethodTag('用户标签')]
-#[MethodDoc('为指定用户分配标签')]
-#[MethodExpose('ServerAssignCrmTag')]
+#[MethodTag(name: '用户标签')]
+#[MethodDoc(summary: '为指定用户分配标签')]
+#[MethodExpose(method: 'ServerAssignCrmTag')]
 #[Log]
 class ServerAssignCrmTag extends LockableProcedure
 {
-    #[MethodParam('用户唯一标志')]
+    #[MethodParam(description: '用户唯一标志')]
     public string $identity;
 
-    #[MethodParam('标签ID')]
+    #[MethodParam(description: '标签ID')]
     public string $tagId;
 
     public function __construct(

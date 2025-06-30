@@ -15,29 +15,29 @@ use UserTagBundle\Enum\TagType;
 use UserTagBundle\Repository\CategoryRepository;
 use UserTagBundle\Repository\TagRepository;
 
-#[IsGranted('IS_AUTHENTICATED_FULLY')]
-#[MethodTag('用户标签')]
-#[MethodDoc('更新单个标签')]
-#[MethodExpose('UpdateSingleUserTag')]
+#[IsGranted(attribute: 'IS_AUTHENTICATED_FULLY')]
+#[MethodTag(name: '用户标签')]
+#[MethodDoc(summary: '更新单个标签')]
+#[MethodExpose(method: 'UpdateSingleUserTag')]
 #[Log]
 class UpdateSingleUserTag extends LockableProcedure
 {
-    #[MethodParam('标签ID')]
+    #[MethodParam(description: '标签ID')]
     public string $id;
 
-    #[MethodParam('用户标签名')]
+    #[MethodParam(description: '用户标签名')]
     public string $name;
 
-    #[MethodParam('标签类型')]
+    #[MethodParam(description: '标签类型')]
     public string $type;
 
-    #[MethodParam('是否有效')]
+    #[MethodParam(description: '是否有效')]
     public bool $valid;
 
-    #[MethodParam('描述')]
+    #[MethodParam(description: '描述')]
     public ?string $description = null;
 
-    #[MethodParam('目录ID')]
+    #[MethodParam(description: '目录ID')]
     public ?string $categoryId = null;
 
     public function __construct(

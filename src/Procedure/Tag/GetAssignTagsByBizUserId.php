@@ -15,17 +15,17 @@ use UserTagBundle\Entity\AssignLog;
 use UserTagBundle\Enum\TagType;
 use UserTagBundle\Repository\AssignLogRepository;
 
-#[IsGranted('IS_AUTHENTICATED_FULLY')]
-#[MethodTag('用户标签')]
-#[MethodDoc('根据用户id获取所有分配的标签记录')]
-#[MethodExpose('GetAssignTagsByBizUserId')]
+#[IsGranted(attribute: 'IS_AUTHENTICATED_FULLY')]
+#[MethodTag(name: '用户标签')]
+#[MethodDoc(summary: '根据用户id获取所有分配的标签记录')]
+#[MethodExpose(method: 'GetAssignTagsByBizUserId')]
 #[Log]
 class GetAssignTagsByBizUserId extends LockableProcedure
 {
-    #[MethodParam('用户ID')]
+    #[MethodParam(description: '用户ID')]
     public string $userId;
 
-    #[MethodParam('类型: static:静态标签、smart：智能标签、sql：SQL标签')]
+    #[MethodParam(description: '类型: static:静态标签、smart：智能标签、sql：SQL标签')]
     public array $type = [];
 
     public function __construct(

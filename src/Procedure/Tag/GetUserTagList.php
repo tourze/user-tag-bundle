@@ -17,24 +17,24 @@ use UserTagBundle\Repository\CategoryRepository;
 use UserTagBundle\Repository\SmartRuleRepository;
 use UserTagBundle\Repository\SqlRuleRepository;
 
-#[MethodTag('用户标签')]
-#[MethodDoc('根据条件，获取标签列表')]
-#[MethodExpose('GetUserTagList')]
-#[IsGranted('IS_AUTHENTICATED_FULLY')]
+#[MethodTag(name: '用户标签')]
+#[MethodDoc(summary: '根据条件，获取标签列表')]
+#[MethodExpose(method: 'GetUserTagList')]
+#[IsGranted(attribute: 'IS_AUTHENTICATED_FULLY')]
 class GetUserTagList extends BaseProcedure
 {
     use PaginatorTrait;
 
-    #[MethodParam('分类ID列表')]
+    #[MethodParam(description: '分类ID列表')]
     public array $categories = [];
 
-    #[MethodParam('类型列表')]
+    #[MethodParam(description: '类型列表')]
     public array $types = [];
 
-    #[MethodParam('名称')]
+    #[MethodParam(description: '名称')]
     public ?string $name = null;
 
-    #[MethodParam('是否有效')]
+    #[MethodParam(description: '是否有效')]
     public ?bool $valid = null;
 
     public function __construct(

@@ -54,16 +54,13 @@ class TagFixture extends Fixture
             ];
         }
 
-        // 创建或获取分类
+        // 创建分类
         $categories = [];
         foreach ($list as [$categoryName, $name]) {
             if (!isset($categories[$categoryName])) {
-                $category = $manager->getRepository(Category::class)->findOneBy(['name' => $categoryName]);
-                if ($category === null) {
-                    $category = new Category();
-                    $category->setName($categoryName);
-                    $manager->persist($category);
-                }
+                $category = new Category();
+                $category->setName($categoryName);
+                $manager->persist($category);
                 $categories[$categoryName] = $category;
             }
         }

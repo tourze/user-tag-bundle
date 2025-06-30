@@ -14,17 +14,17 @@ use Tourze\JsonRPCLogBundle\Attribute\Log;
 use UserTagBundle\Repository\TagRepository;
 use UserTagBundle\Service\LocalUserTagLoader;
 
-#[IsGranted('IS_AUTHENTICATED_FULLY')]
-#[MethodTag('用户标签')]
-#[MethodDoc('解绑打标记录')]
-#[MethodExpose('UnassignTagToBizUser')]
+#[IsGranted(attribute: 'IS_AUTHENTICATED_FULLY')]
+#[MethodTag(name: '用户标签')]
+#[MethodDoc(summary: '解绑打标记录')]
+#[MethodExpose(method: 'UnassignTagToBizUser')]
 #[Log]
 class UnassignTagToBizUser extends LockableProcedure
 {
-    #[MethodParam('用户ID')]
+    #[MethodParam(description: '用户ID')]
     public string $userId;
 
-    #[MethodParam('标签ID')]
+    #[MethodParam(description: '标签ID')]
     public string $tagId;
 
     public function __construct(

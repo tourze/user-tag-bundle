@@ -13,14 +13,14 @@ use Tourze\JsonRPCLockBundle\Procedure\LockableProcedure;
 use Tourze\JsonRPCLogBundle\Attribute\Log;
 use UserTagBundle\Repository\TagRepository;
 
-#[IsGranted('IS_AUTHENTICATED_FULLY')]
-#[MethodTag('用户标签')]
-#[MethodDoc('删除单个标签')]
-#[MethodExpose('DeleteSingleUserTag')]
+#[IsGranted(attribute: 'IS_AUTHENTICATED_FULLY')]
+#[MethodTag(name: '用户标签')]
+#[MethodDoc(summary: '删除单个标签')]
+#[MethodExpose(method: 'DeleteSingleUserTag')]
 #[Log]
 class DeleteSingleUserTag extends LockableProcedure
 {
-    #[MethodParam('标签ID')]
+    #[MethodParam(description: '标签ID')]
     public string $id;
 
     public function __construct(

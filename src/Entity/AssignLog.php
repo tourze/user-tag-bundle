@@ -8,6 +8,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Tourze\Arrayable\ApiArrayInterface;
 use Tourze\Arrayable\PlainArrayInterface;
 use Tourze\DoctrineSnowflakeBundle\Service\SnowflakeIdGenerator;
+use Tourze\DoctrineSnowflakeBundle\Traits\SnowflakeKeyAware;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineTrackBundle\Attribute\TrackColumn;
 use Tourze\DoctrineUserBundle\Traits\BlameableAware;
@@ -20,12 +21,7 @@ class AssignLog implements \Stringable, ApiArrayInterface, PlainArrayInterface
 {
     use TimestampableAware;
     use BlameableAware;
-
-    #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(SnowflakeIdGenerator::class)]
-    #[ORM\Column(type: Types::BIGINT, nullable: false, options: ['comment' => 'ID'])]
-    private ?string $id = null;
+    use SnowflakeKeyAware;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
@@ -62,12 +58,6 @@ class AssignLog implements \Stringable, ApiArrayInterface, PlainArrayInterface
             $this->getUser()->getUserIdentifier()
         );
     }
-
-    public function getId(): ?string
-    {
-        return $this->id;
-    }
-
 
     public function setCreatedFromIp(?string $createdFromIp): self
     {

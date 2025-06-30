@@ -13,19 +13,19 @@ use Tourze\UserIDBundle\Service\UserIdentityService;
 use UserTagBundle\Repository\TagRepository;
 use UserTagBundle\Service\LocalUserTagLoader;
 
-#[MethodTag('用户标签')]
-#[MethodDoc('为指定身份打标签')]
-#[MethodExpose('ServerAssignTagByIdentity')]
+#[MethodTag(name: '用户标签')]
+#[MethodDoc(summary: '为指定身份打标签')]
+#[MethodExpose(method: 'ServerAssignTagByIdentity')]
 #[Log]
 class ServerAssignTagByIdentity extends LockableProcedure
 {
-    #[MethodParam('用户标识类型')]
+    #[MethodParam(description: '用户标识类型')]
     public string $identityType;
 
-    #[MethodParam('用户标识值')]
+    #[MethodParam(description: '用户标识值')]
     public string $identityValue;
 
-    #[MethodParam('标签ID')]
+    #[MethodParam(description: '标签ID')]
     public string $tagId;
 
     public function __construct(

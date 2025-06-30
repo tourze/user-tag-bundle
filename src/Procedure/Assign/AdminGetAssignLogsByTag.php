@@ -13,15 +13,15 @@ use UserTagBundle\Entity\AssignLog;
 use UserTagBundle\Repository\AssignLogRepository;
 use UserTagBundle\Repository\TagRepository;
 
-#[IsGranted('ROLE_OPERATOR')]
-#[MethodTag('用户标签')]
-#[MethodDoc('根据标签获取打标记录')]
-#[MethodExpose('AdminGetAssignLogsByTag')]
+#[IsGranted(attribute: 'ROLE_OPERATOR')]
+#[MethodTag(name: '用户标签')]
+#[MethodDoc(summary: '根据标签获取打标记录')]
+#[MethodExpose(method: 'AdminGetAssignLogsByTag')]
 class AdminGetAssignLogsByTag extends BaseProcedure
 {
     use PaginatorTrait;
 
-    #[MethodParam('标签ID')]
+    #[MethodParam(description: '标签ID')]
     public string $tagId;
 
     public function __construct(

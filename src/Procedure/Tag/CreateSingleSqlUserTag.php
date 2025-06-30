@@ -15,19 +15,19 @@ use Tourze\JsonRPCLogBundle\Attribute\Log;
 use UserTagBundle\Entity\SqlRule;
 use UserTagBundle\Enum\TagType;
 
-#[IsGranted('IS_AUTHENTICATED_FULLY')]
-#[MethodTag('用户标签')]
-#[MethodDoc('创建单个SQL标签')]
-#[MethodExpose('CreateSingleSqlUserTag')]
+#[IsGranted(attribute: 'IS_AUTHENTICATED_FULLY')]
+#[MethodTag(name: '用户标签')]
+#[MethodDoc(summary: '创建单个SQL标签')]
+#[MethodExpose(method: 'CreateSingleSqlUserTag')]
 #[Log]
 class CreateSingleSqlUserTag extends CreateSingleUserTag implements ServiceSubscriberInterface
 {
     use ServiceMethodsSubscriberTrait;
 
-    #[MethodParam('SQL语句')]
+    #[MethodParam(description: 'SQL语句')]
     public string $sqlStatement;
 
-    #[MethodParam('频率/定时表达式')]
+    #[MethodParam(description: '频率/定时表达式')]
     public string $cronStatement;
 
     public function execute(): array

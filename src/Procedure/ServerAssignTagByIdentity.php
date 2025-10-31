@@ -38,12 +38,12 @@ class ServerAssignTagByIdentity extends LockableProcedure
     public function execute(): array
     {
         $identity = $this->userIdentityService->findByType($this->identityType, $this->identityValue);
-        if ($identity === null) {
+        if (null === $identity) {
             throw new ApiException('找不到用户信息');
         }
 
         $user = $identity->getUser();
-        if ($user === null) {
+        if (null === $user) {
             throw new ApiException('身份信息未关联用户');
         }
 
@@ -51,7 +51,7 @@ class ServerAssignTagByIdentity extends LockableProcedure
             'id' => $this->tagId,
             'valid' => true,
         ]);
-        if ($tag === null) {
+        if (null === $tag) {
             throw new ApiException('找不到标签信息');
         }
 

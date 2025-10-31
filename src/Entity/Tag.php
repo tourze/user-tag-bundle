@@ -5,9 +5,10 @@ namespace UserTagBundle\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 use Tourze\Arrayable\PlainArrayInterface;
-use Tourze\DoctrineIpBundle\Attribute\CreateIpColumn;
-use Tourze\DoctrineIpBundle\Attribute\UpdateIpColumn;
+use Tourze\CatalogBundle\Entity\Catalog;
+use Tourze\DoctrineIpBundle\Traits\IpTraceableAware;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineTrackBundle\Attribute\TrackColumn;
 use Tourze\DoctrineUserBundle\Traits\BlameableAware;
@@ -15,67 +16,61 @@ use Tourze\UserTagContracts\TagInterface;
 use UserTagBundle\Enum\TagType;
 use UserTagBundle\Repository\TagRepository;
 
+/**
+ * @implements PlainArrayInterface<string, mixed>
+ */
 #[ORM\Entity(repositoryClass: TagRepository::class)]
 #[ORM\Table(name: 'crm_tag', options: ['comment' => '客户标签'])]
-#[ORM\UniqueConstraint(name: 'crm_tag_idx_uniq', columns: ['category_id', 'name'])]
+#[ORM\UniqueConstraint(name: 'crm_tag_idx_uniq', columns: ['catalog_id', 'name'])]
 class Tag implements \Stringable, PlainArrayInterface, TagInterface
 {
     use TimestampableAware;
     use BlameableAware;
+    use IpTraceableAware;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER, options: ['comment' => 'ID'])]
-    private ?int $id = 0;
-
-    #[TrackColumn]
-    private ?bool $valid = false;
+    private int $id = 0;
 
     #[Groups(groups: ['restful_read', 'restful_write'])]
-    #[ORM\ManyToOne(inversedBy: 'tags')]
-    private ?Category $category = null;
+    #[ORM\ManyToOne(targetEntity: Catalog::class)]
+    private ?Catalog $catalog = null;
 
+    #[Assert\Choice(callback: [TagType::class, 'cases'])]
     #[Groups(groups: ['restful_read', 'restful_write'])]
     #[ORM\Column(length: 40, nullable: false, enumType: TagType::class, options: ['comment' => '类型', 'default' => 'static'])]
     private TagType $type = TagType::StaticTag;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     #[Groups(groups: ['restful_read', 'restful_write'])]
+    #[ORM\Column(length: 255, nullable: false, options: ['comment' => '标签名称'])]
     private string $name;
 
+    #[Assert\Type(type: 'string')]
+    #[Assert\Length(max: 65535)]
     #[Groups(groups: ['restful_read', 'restful_write'])]
+    #[ORM\Column(type: Types::TEXT, nullable: true, options: ['comment' => '标签描述'])]
     private ?string $description = null;
 
-
-    #[CreateIpColumn]
-    private ?string $createdFromIp = null;
-
-    #[UpdateIpColumn]
-    private ?string $updatedFromIp = null;
+    #[Assert\Type(type: 'bool')]
+    #[ORM\Column(nullable: true, options: ['comment' => '是否有效'])]
+    #[TrackColumn]
+    private ?bool $valid = false;
 
     public function __toString(): string
     {
-        if ($this->getId() === null || $this->getId() === 0) {
+        if (0 === $this->getId()) {
             return '';
         }
 
-        return "{$this->getCategory()}:{$this->getName()}";
+        return "{$this->getCatalog()}:{$this->getName()}";
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
-    }
-
-    public function isValid(): ?bool
-    {
-        return $this->valid;
-    }
-
-    public function setValid(?bool $valid): self
-    {
-        $this->valid = $valid;
-
-        return $this;
     }
 
     public function getName(): string
@@ -83,11 +78,9 @@ class Tag implements \Stringable, PlainArrayInterface, TagInterface
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(string $name): void
     {
         $this->name = $name;
-
-        return $this;
     }
 
     public function getType(): TagType
@@ -95,23 +88,19 @@ class Tag implements \Stringable, PlainArrayInterface, TagInterface
         return $this->type;
     }
 
-    public function setType(TagType $type): static
+    public function setType(TagType $type): void
     {
         $this->type = $type;
-
-        return $this;
     }
 
-    public function getCategory(): ?Category
+    public function getCatalog(): ?Catalog
     {
-        return $this->category;
+        return $this->catalog;
     }
 
-    public function setCategory(?Category $category): static
+    public function setCatalog(?Catalog $catalog): void
     {
-        $this->category = $category;
-
-        return $this;
+        $this->catalog = $catalog;
     }
 
     public function getDescription(): ?string
@@ -119,37 +108,25 @@ class Tag implements \Stringable, PlainArrayInterface, TagInterface
         return $this->description;
     }
 
-    public function setDescription(?string $description): static
+    public function setDescription(?string $description): void
     {
         $this->description = $description;
-
-        return $this;
     }
 
-
-    public function setCreatedFromIp(?string $createdFromIp): self
+    public function isValid(): ?bool
     {
-        $this->createdFromIp = $createdFromIp;
-
-        return $this;
+        return $this->valid;
     }
 
-    public function getCreatedFromIp(): ?string
+    public function setValid(?bool $valid): void
     {
-        return $this->createdFromIp;
+        $this->valid = $valid;
     }
 
-    public function setUpdatedFromIp(?string $updatedFromIp): self
-    {
-        $this->updatedFromIp = $updatedFromIp;
-
-        return $this;
-    }
-
-    public function getUpdatedFromIp(): ?string
-    {
-        return $this->updatedFromIp;
-    }public function retrievePlainArray(): array
+    /**
+     * @return array<string, mixed>
+     */
+    public function retrievePlainArray(): array
     {
         return [
             'id' => $this->getId(),
@@ -158,7 +135,7 @@ class Tag implements \Stringable, PlainArrayInterface, TagInterface
             'name' => $this->getName(),
             'description' => $this->getDescription(),
             'type' => $this->getType()->toArray(),
-            'category' => $this->getCategory()?->retrievePlainArray(),
+            'catalog' => $this->getCatalog()?->getName(),
             'valid' => $this->isValid(),
         ];
     }

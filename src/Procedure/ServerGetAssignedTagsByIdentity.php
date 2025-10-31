@@ -37,20 +37,24 @@ class ServerGetAssignedTagsByIdentity extends LockableProcedure
     public function execute(): array
     {
         $identity = $this->userIdentityService->findByType($this->identityType, $this->identityValue);
-        if ($identity === null) {
+        if (null === $identity) {
             throw new ApiException('找不到用户信息');
         }
-        
+
         $user = $identity->getUser();
 
         $qb = $this->assignLogRepository->createQueryBuilder('a')
             ->where('a.user = :user')
             ->setParameter('user', $user)
-            ->orderBy('a.createTime', 'DESC');
+            ->orderBy('a.createTime', 'DESC')
+        ;
 
         return $this->fetchList($qb, $this->formatItem(...));
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function formatItem(AssignLog $assignLog): array
     {
         return $assignLog->retrieveApiArray();

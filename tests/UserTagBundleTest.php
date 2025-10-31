@@ -1,22 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace UserTagBundle\Tests;
 
-use PHPUnit\Framework\TestCase;
-use Tourze\BundleDependency\BundleDependencyInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use Tourze\PHPUnitSymfonyKernelTest\AbstractBundleTestCase;
 use UserTagBundle\UserTagBundle;
 
-class UserTagBundleTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(UserTagBundle::class)]
+#[RunTestsInSeparateProcesses]
+final class UserTagBundleTest extends AbstractBundleTestCase
 {
-    public function testInstanceImplementsBundleDependencyInterface(): void
-    {
-        $bundle = new UserTagBundle();
-        $this->assertInstanceOf(BundleDependencyInterface::class, $bundle);
-    }
-
-    public function testGetBundleDependenciesReturnsArray(): void
-    {
-        $dependencies = UserTagBundle::getBundleDependencies();
-        $this->assertSame([], $dependencies);
-    }
-} 
+}

@@ -1,3 +1,0 @@
-user_tag_controllers:
-  resource: '../../Controller/'
-  type: attribute

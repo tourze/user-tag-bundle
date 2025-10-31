@@ -4,17 +4,20 @@ services:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-  UserTagBundle\AdminMenu: ~
-
   # 如果确认要使用自动扫描、自动注册，建议尽可能将要扫描的目录路径收缩，不要设置那么大的范围
-  UserTagBundle\:
-    resource: '../../'
-    exclude:
-      - '../../DependencyInjection/'
-      - '../../Enum/'
-      - '../../Entity/'
-      - '../../Message/'
-      - '../../Model/'
-      - '../../Exception/'
-      - '../../Resources/'
-      - '../../Tests/'
+  UserTagBundle\Command\:
+    resource: '../../Command/'
+  UserTagBundle\Controller\:
+    resource: '../../Controller/'
+  UserTagBundle\EventSubscriber\:
+    resource: '../../EventSubscriber/'
+  UserTagBundle\ExpressionLanguage\:
+    resource: '../../ExpressionLanguage/'
+  UserTagBundle\MessageHandler\:
+    resource: '../../MessageHandler/'
+  UserTagBundle\Procedure\:
+    resource: '../../Procedure/'
+  UserTagBundle\Repository\:
+    resource: '../../Repository/'
+  UserTagBundle\Service\:
+    resource: '../../Service/'

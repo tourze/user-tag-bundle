@@ -2,7 +2,9 @@
 
 namespace UserTagBundle\ExpressionLanguage\Function;
 
+use Monolog\Attribute\WithMonologChannel;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\ExpressionLanguage\ExpressionFunction;
 use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
@@ -13,36 +15,48 @@ use UserTagBundle\Service\LocalUserTagLoader;
 /**
  * CRM标签相关函数
  */
+#[Autoconfigure(public: true)]
 #[AutoconfigureTag(name: 'ecol.function.provider')]
-class TagFunctionProvider implements ExpressionFunctionProviderInterface
+#[WithMonologChannel(channel: 'user_tag')]
+readonly class TagFunctionProvider implements ExpressionFunctionProviderInterface
 {
     public function __construct(
-        private readonly LoggerInterface $logger,
-        private readonly LocalUserTagLoader  $userTagService,
-        private readonly AssignLogRepository $tagUserRepository,
+        private LoggerInterface $logger,
+        private LocalUserTagLoader $userTagService,
+        private AssignLogRepository $tagUserRepository,
     ) {
     }
 
     public function getFunctions(): array
     {
         return [
-            new ExpressionFunction('checkCrmCustomerHasTag', fn (...$args) => sprintf('\%s(%s)', 'checkCrmCustomerHasTag', implode(', ', $args)), function ($values, ...$args) {
+            new ExpressionFunction('checkCrmCustomerHasTag', fn (...$args) => sprintf('\%s(%s)', 'checkCrmCustomerHasTag', implode(', ', (array) $args)), function ($values, ...$args) {
                 $this->logger->debug('checkCrmCustomerHasTag', [
                     'values' => $values,
                     'args' => $args,
                 ]);
 
-                return $this->checkCrmCustomerHasTag($values, ...$args);
+                /** @var array<string, mixed> $values */
+                /** @var UserInterface|null $user */
+                $user = $args[0] ?? null;
+                /** @var string $tagName */
+                $tagName = $args[1] ?? '';
+                /** @var string $tagCategory */
+                $tagCategory = $args[2] ?? '';
+
+                return $this->checkCrmCustomerHasTag($values, $user, $tagName, $tagCategory);
             }),
         ];
     }
 
     /**
      * 判断指定用户是否有特定标签，使用例子： checkCrmCustomerHasTag(user, '黑名单')
+     *
+     * @param array<string, mixed> $values
      */
     public function checkCrmCustomerHasTag(array $values, ?UserInterface $user, string $tagName, string $tagCategory = ''): bool
     {
-        if ($user === null) {
+        if (null === $user) {
             return false;
         }
         $tag = $this->userTagService->getTagByName($tagName, $tagCategory);

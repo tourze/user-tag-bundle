@@ -3,6 +3,7 @@
 namespace UserTagBundle\Procedure\Tag;
 
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Tourze\JsonRPC\Core\Attribute\MethodDoc;
 use Tourze\JsonRPC\Core\Attribute\MethodExpose;
@@ -25,6 +26,7 @@ class GetAssignTagsByBizUserId extends LockableProcedure
     #[MethodParam(description: '用户ID')]
     public string $userId;
 
+    /** @var array<int, string> */
     #[MethodParam(description: '类型: static:静态标签、smart：智能标签、sql：SQL标签')]
     public array $type = [];
 
@@ -36,42 +38,85 @@ class GetAssignTagsByBizUserId extends LockableProcedure
 
     public function execute(): array
     {
+        $user = $this->loadUser();
+        $validTypes = $this->parseTagTypes();
+        $logs = $this->queryAssignLogs($user, $validTypes);
+
+        return [
+            'list' => $this->formatLogList($logs, $user),
+        ];
+    }
+
+    private function loadUser(): UserInterface
+    {
         $user = $this->userLoader->loadUserByIdentifier($this->userId);
-        if ($user === null) {
+        if (null === $user) {
             throw new ApiException('用户不存在');
         }
-        $type = [];
-        if (!empty($this->type)) {
-            foreach ($this->type as $item) {
-                $tmp = TagType::tryFrom($item);
-                if ($tmp !== null) {
-                    $type[] = $tmp;
-                }
+
+        return $user;
+    }
+
+    /**
+     * @return array<int, TagType>
+     */
+    private function parseTagTypes(): array
+    {
+        if ([] === $this->type) {
+            return [];
+        }
+
+        $validTypes = [];
+        foreach ($this->type as $item) {
+            $tmp = TagType::tryFrom($item);
+            if (null !== $tmp) {
+                $validTypes[] = $tmp;
             }
         }
 
-        //        $logs = $this->assignLogRepository->findBy(['user' => $user]);
+        return $validTypes;
+    }
+
+    /**
+     * @param array<int, TagType> $validTypes
+     * @return array<int, AssignLog>
+     */
+    private function queryAssignLogs(UserInterface $user, array $validTypes): array
+    {
         $query = $this->assignLogRepository->createQueryBuilder('a')
             ->where('a.user = :user')
-            ->setParameter('user', $user);
+            ->setParameter('user', $user)
+        ;
 
-        if (!empty($type)) {
+        if ([] !== $validTypes) {
             $query->innerJoin('a.tag', 't')
                 ->andWhere('t.type in (:type)')
-                ->setParameter('type', $type);
+                ->setParameter('type', $validTypes)
+            ;
         }
-        $logs = $query->orderBy('a.createTime', 'DESC')
+
+        /** @var array<int, AssignLog> */
+        return $query->orderBy('a.createTime', 'DESC')
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @param array<int, AssignLog> $logs
+     * @return array<int, array<string, mixed>>
+     */
+    private function formatLogList(array $logs, UserInterface $user): array
+    {
         $list = [];
         /** @var AssignLog $log */
         foreach ($logs as $log) {
             $tag = $log->getTag();
-            if ($tag === null) {
+            if (null === $tag) {
                 continue;
             }
             $list[] = [
-                'tagInfo' => $log->getTag()->retrievePlainArray(),
+                'tagInfo' => $tag->retrievePlainArray(),
                 'userInfo' => [
                     'id' => $user->getUserIdentifier(),
                 ],
@@ -81,8 +126,6 @@ class GetAssignTagsByBizUserId extends LockableProcedure
             ];
         }
 
-        return [
-            'list' => $list,
-        ];
+        return $list;
     }
 }

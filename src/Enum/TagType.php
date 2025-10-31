@@ -15,7 +15,6 @@ enum TagType: string implements Labelable, Itemable, Selectable
 {
     use ItemTrait;
     use SelectTrait;
-
     case Empty = '';
     case StaticTag = 'static';
     case SmartTag = 'smart';

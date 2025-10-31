@@ -30,19 +30,19 @@ class AssignTagToBizUser extends LockableProcedure
     public function __construct(
         private readonly UserLoaderInterface $userLoader,
         private readonly TagRepository $tagRepository,
-        private readonly LocalUserTagLoader  $userTagService,
+        private readonly LocalUserTagLoader $userTagService,
     ) {
     }
 
     public function execute(): array
     {
         $user = $this->userLoader->loadUserByIdentifier($this->userId);
-        if ($user === null) {
+        if (null === $user) {
             throw new ApiException('找不到指定用户');
         }
 
         $tag = $this->tagRepository->find($this->tagId);
-        if ($tag === null) {
+        if (null === $tag) {
             throw new ApiException('找不到指定标签');
         }
 

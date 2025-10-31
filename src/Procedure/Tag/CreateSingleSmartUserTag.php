@@ -24,6 +24,7 @@ class CreateSingleSmartUserTag extends CreateSingleUserTag implements ServiceSub
 {
     use ServiceMethodsSubscriberTrait;
 
+    /** @var array<string, mixed> */
     #[MethodParam(description: 'JSON表达式')]
     public array $jsonStatement;
 
@@ -32,13 +33,14 @@ class CreateSingleSmartUserTag extends CreateSingleUserTag implements ServiceSub
 
     public function execute(): array
     {
-        $this->getEntityManager()->wrapInTransaction(function () {
+        $tag = null;
+        $this->getEntityManager()->wrapInTransaction(function () use (&$tag): void {
             $tag = $this->createTag(
                 $this->name,
                 TagType::SmartTag,
                 $this->valid,
                 $this->description,
-                $this->categoryId,
+                $this->catalogId,
             );
 
             $rule = new SmartRule();
@@ -49,7 +51,18 @@ class CreateSingleSmartUserTag extends CreateSingleUserTag implements ServiceSub
             $this->getEntityManager()->flush();
         });
 
+        if (null === $tag) {
+            throw new \RuntimeException('Tag creation failed');
+        }
+
         return [
+            'id' => $tag->getId(),
+            'name' => $tag->getName(),
+            'type' => $tag->getType()->value,
+            'valid' => $tag->isValid(),
+            'description' => $tag->getDescription(),
+            'jsonStatement' => $this->jsonStatement,
+            'cronStatement' => $this->cronStatement,
             '__message' => '创建成功',
         ];
     }
@@ -57,6 +70,7 @@ class CreateSingleSmartUserTag extends CreateSingleUserTag implements ServiceSub
     #[SubscribedService]
     private function getEntityManager(): EntityManagerInterface
     {
+        /** @var EntityManagerInterface */
         return $this->container->get(__METHOD__);
     }
 }

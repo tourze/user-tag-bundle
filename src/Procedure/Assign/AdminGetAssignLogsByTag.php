@@ -38,11 +38,15 @@ class AdminGetAssignLogsByTag extends BaseProcedure
         $qb = $this->assignLogRepository->createQueryBuilder('a')
             ->where('a.tag = :tag')
             ->setParameter('tag', $tag)
-            ->orderBy('a.createTime', 'DESC');
+            ->orderBy('a.createTime', 'DESC')
+        ;
 
         return $this->fetchList($qb, $this->formatItem(...));
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function formatItem(AssignLog $assignLog): array
     {
         return [
@@ -50,7 +54,7 @@ class AdminGetAssignLogsByTag extends BaseProcedure
             'createTime' => $assignLog->getCreateTime()?->format('Y-m-d H:i:s'),
             'updateTime' => $assignLog->getUpdateTime()?->format('Y-m-d H:i:s'),
             'user' => [
-                'id' => $assignLog->getUser()->getUserIdentifier(),
+                'id' => $assignLog->getUserId(),
             ],
         ];
     }

@@ -2,7 +2,6 @@
 
 namespace UserTagBundle\Tests\Procedure\Tag;
 
-use BizUserBundle\Entity\BizUser;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Tourze\JsonRPC\Core\Exception\ApiException;
@@ -37,8 +36,8 @@ final class UnassignTagToBizUserTest extends AbstractProcedureTestCase
     public function testExecuteSuccess(): void
     {
         // 创建测试用户
-        $user = $this->createNormalUser('test@example.com', 'password');
-        self::assertInstanceOf(BizUser::class, $user);
+        $username = 'test@example.com';
+        $user = $this->createNormalUser($username, 'password');
 
         // 创建测试标签
         $tag = new Tag();
@@ -48,8 +47,10 @@ final class UnassignTagToBizUserTest extends AbstractProcedureTestCase
         self::getEntityManager()->persist($tag);
         self::getEntityManager()->flush();
 
+        // Procedure 使用 UserLoaderInterface::loadUserByIdentifier() 查找用户
+        // 该方法期望 userIdentifier（username），而非数字 ID
         $this->procedure->tagId = (string) $tag->getId();
-        $this->procedure->userId = (string) $user->getId();
+        $this->procedure->userId = $user->getUserIdentifier();
 
         $result = $this->procedure->execute();
 

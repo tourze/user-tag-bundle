@@ -2,7 +2,6 @@
 
 namespace UserTagBundle\Tests\Procedure\Tag;
 
-use BizUserBundle\Entity\BizUser;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Tourze\JsonRPC\Core\Tests\AbstractProcedureTestCase;
@@ -25,10 +24,12 @@ final class GetAssignTagsByBizUserIdTest extends AbstractProcedureTestCase
     public function testExecute(): void
     {
         // 创建测试用户
-        $user = $this->createNormalUser('test@example.com', 'password');
-        self::assertInstanceOf(BizUser::class, $user);
+        $username = 'test@example.com';
+        $user = $this->createNormalUser($username, 'password');
 
-        $this->procedure->userId = (string) $user->getId();
+        // Procedure 使用 UserLoaderInterface::loadUserByIdentifier() 查找用户
+        // 该方法期望 userIdentifier（username），而非数字 ID
+        $this->procedure->userId = $user->getUserIdentifier();
 
         $result = $this->procedure->execute();
 

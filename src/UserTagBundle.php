@@ -16,6 +16,7 @@ use Tourze\JsonRPCLockBundle\JsonRPCLockBundle;
 use Tourze\JsonRPCPaginatorBundle\JsonRPCPaginatorBundle;
 use Tourze\JsonRPCSecurityBundle\JsonRPCSecurityBundle;
 use Tourze\UserIDBundle\UserIDBundle;
+use Tourze\EasyAdminMenuBundle\EasyAdminMenuBundle;
 
 class UserTagBundle extends Bundle implements BundleDependencyInterface
 {
@@ -34,6 +35,7 @@ class UserTagBundle extends Bundle implements BundleDependencyInterface
             JsonRPCLockBundle::class => ['all' => true],
             JsonRPCPaginatorBundle::class => ['all' => true],
             JsonRPCSecurityBundle::class => ['all' => true],
+            EasyAdminMenuBundle::class => ['all' => true],
         ];
     }
 }

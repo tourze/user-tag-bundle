@@ -69,7 +69,6 @@ final class UserTagAssignLogCrudController extends AbstractCrudController
         yield AssociationField::new('user', '用户对象')
             ->setRequired(false)
             ->hideOnIndex()
-            ->autocomplete()
         ;
 
         yield DateTimeField::new('assignTime', '绑定时间')

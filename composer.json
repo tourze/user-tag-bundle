@@ -53,7 +53,7 @@
     "tourze/symfony-dependency-service-loader": "1.0.*",
     "tourze/user-id-bundle": "1.0.*",
     "tourze/user-service-contracts": "1.*",
-    "tourze/user-tag-contracts": "0.0.*",
+    "tourze/user-tag-contracts": "1.0.*",
     "yiisoft/json": "^1.0"
   },
   "require-dev": {

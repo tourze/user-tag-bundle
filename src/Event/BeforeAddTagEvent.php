@@ -6,7 +6,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 use UserTagBundle\Entity\Tag;
 
-class BeforeAddTagEvent extends Event
+final class BeforeAddTagEvent extends Event
 {
     private UserInterface $user;
 

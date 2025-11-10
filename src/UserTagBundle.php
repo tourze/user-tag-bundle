@@ -12,11 +12,11 @@ use Tourze\DoctrineSnowflakeBundle\DoctrineSnowflakeBundle;
 use Tourze\DoctrineTimestampBundle\DoctrineTimestampBundle;
 use Tourze\DoctrineTrackBundle\DoctrineTrackBundle;
 use Tourze\DoctrineUserBundle\DoctrineUserBundle;
+use Tourze\EasyAdminMenuBundle\EasyAdminMenuBundle;
 use Tourze\JsonRPCLockBundle\JsonRPCLockBundle;
 use Tourze\JsonRPCPaginatorBundle\JsonRPCPaginatorBundle;
 use Tourze\JsonRPCSecurityBundle\JsonRPCSecurityBundle;
 use Tourze\UserIDBundle\UserIDBundle;
-use Tourze\EasyAdminMenuBundle\EasyAdminMenuBundle;
 
 class UserTagBundle extends Bundle implements BundleDependencyInterface
 {

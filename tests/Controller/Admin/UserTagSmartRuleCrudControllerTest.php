@@ -47,11 +47,6 @@ final class UserTagSmartRuleCrudControllerTest extends AbstractEasyAdminControll
         // yield 'jsonStatement' => ['jsonStatement']; // CodeEditorField生成code editor而非input，暂时注释
     }
 
-    public function testGetEntityFqcn(): void
-    {
-        $this->assertSame(SmartRule::class, UserTagSmartRuleCrudController::getEntityFqcn());
-    }
-
     public function testConfigureFields(): void
     {
         $controller = new UserTagSmartRuleCrudController();

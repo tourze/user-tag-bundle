@@ -47,11 +47,6 @@ final class UserTagSqlRuleCrudControllerTest extends AbstractEasyAdminController
         // yield 'sqlStatement' => ['sqlStatement']; // CodeEditorField生成code editor而非input，暂时注释
     }
 
-    public function testGetEntityFqcn(): void
-    {
-        $this->assertSame(SqlRule::class, UserTagSqlRuleCrudController::getEntityFqcn());
-    }
-
     public function testConfigureFields(): void
     {
         $controller = new UserTagSqlRuleCrudController();

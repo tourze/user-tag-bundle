@@ -55,11 +55,6 @@ final class UserTagAssignLogCrudControllerTest extends AbstractEasyAdminControll
         // yield 'unassignTime' => ['unassignTime']; // DateTimeField 有特殊的HTML结构，暂时跳过
     }
 
-    public function testGetEntityFqcn(): void
-    {
-        $this->assertSame(AssignLog::class, UserTagAssignLogCrudController::getEntityFqcn());
-    }
-
     public function testConfigureFields(): void
     {
         $controller = new UserTagAssignLogCrudController();

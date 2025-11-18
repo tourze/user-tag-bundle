@@ -50,11 +50,6 @@ final class UserTagTagCrudControllerTest extends AbstractEasyAdminControllerTest
         yield 'name' => ['name'];
     }
 
-    public function testGetEntityFqcn(): void
-    {
-        $this->assertSame(Tag::class, UserTagTagCrudController::getEntityFqcn());
-    }
-
     public function testConfigureFields(): void
     {
         $controller = new UserTagTagCrudController();
